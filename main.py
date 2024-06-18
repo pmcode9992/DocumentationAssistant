@@ -1,6 +1,13 @@
 import google.generativeai as palm
+from dotenv import load_dotenv
+import os
+import streamlit as st
 
-palm.configure(api_key="AIzaSyAzp_yFH6hiPx5RAgOsQXyYTdiMW8_6Abg")
+load_dotenv()
+
+key = os.getenv("api")
+
+palm.configure(api_key=key)
 
 def summarize_code(code_snippet):
     prompt = f"Summarize the following code:\n\n{code_snippet}\n\nSummary:"
@@ -11,15 +18,25 @@ def summarize_code(code_snippet):
         return summary
     else:
         return "No summary available."
+    
+
+def main():
+
+    st.title("Code summarization")
+    st.write("Give code here: ")
+
+    code = st.text_area("Code Snippet", height=300)
+
+    if st.button("Summarize"):
+        if not code.strip():
+            st.error("Please enter a code snippet to summarize.")
+        else:
+            with st.spinner("Summarizing..."):
+                summary = summarize_code(code)
+            st.subheader("Summary")
+            st.write(summary)
+
 
 
 if __name__ == "__main__":
-    code_snippet = """
-    def add(a, b):
-        return a + b
-
-    def subtract(a, b):
-        return a - b
-    """
-    summary = summarize_code(code_snippet)
-    print("Summary:", summary)
+    main()
