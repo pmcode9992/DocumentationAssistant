@@ -34,7 +34,7 @@ def genSummary(pth):
     
 def printDir(pth):
     l=[]
-    unwanted_files = ["Node Modules", ".DS_Store", "__pycache__"]
+    unwanted_files = ["Node Modules", ".DS_Store", "__pycache__", "docuAssist"]
     if os.path.isdir(pth):
         l = os.listdir(pth)
         l = list(filter(lambda x : x not in unwanted_files, l))
