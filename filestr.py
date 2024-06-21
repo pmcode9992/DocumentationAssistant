@@ -3,7 +3,7 @@ import os
 import google.generativeai as palm
 
 def summarize_code(code_snippet):
-    palm.configure(api_key="AIzaSyAzp_yFH6hiPx5RAgOsQXyYTdiMW8_6Abg")
+    palm.configure(api_key="AIzaSyDg2-QAcMEA2ZSgZx1IZL7G_-NCimGEEr0")
     prompt = f"Summarize the following code:\n\n{code_snippet}\n\nSummary:"
     response = palm.generate_text(model="models/text-bison-001", prompt=prompt)
     
@@ -15,24 +15,25 @@ def summarize_code(code_snippet):
 
 def genSummary(pth):
     summary = ""
-    # code_snippet = ""
-    # with open(pth, "r") as file:
-    #     try:
-    #         code_snippet = file.read()
-    #         try: 
-    #             summary = summarize_code(code_snippet)
-    #             print(summary)
-    #         except:
-    #             return "Error summarising"
-    #     except:
-    #         return "Unreadable file"
-    # # summary = summarize_code(code_snippet)
+    code_snippet = ""
+    with open(pth, "r") as file:
+        try:
+            code_snippet = file.read()
+            try: 
+                summary = summarize_code(code_snippet)
+            except:
+                return "Error summarising"
+        except:
+            return "Unreadable file"
+    # summary = summarize_code(code_snippet)
     return summary
     
 def printDir(pth):
     l=[]
+    unwanted_files = ["Node Modules", ".DS_Store", "__pycache__"]
     if os.path.isdir(pth):
         l = os.listdir(pth)
+        l = list(filter(lambda x : x not in unwanted_files, l))
         for i in range(0, len(l)):
             if(os.path.isdir(pth + "/" + l[i])):
                 l[i] = printDir((pth + "/" + l[i]))
