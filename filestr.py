@@ -1,9 +1,13 @@
 import streamlit as st
 import os
 import google.generativeai as palm
+from dotenv import load_dotenv
+
+load_dotenv()
+key = os.getenv("api")
 
 def summarize_code(code_snippet):
-    palm.configure(api_key="AIzaSyDg2-QAcMEA2ZSgZx1IZL7G_-NCimGEEr0")
+    palm.configure(api_key=key)
     prompt = f"Summarize the following code:\n\n{code_snippet}\n\nSummary:"
     response = palm.generate_text(model="models/text-bison-001", prompt=prompt)
     
