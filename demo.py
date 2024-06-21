@@ -48,6 +48,7 @@ def printDir(pth):
 
          
 st.write("Welcome to DocuAssist")
+# st.file_uploader("upload the root directory")
 
 initial_path = st.text_input("Enter complete path of root directory")
 if st.button("get file structure"):
