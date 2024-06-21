@@ -2,6 +2,10 @@ import streamlit as st
 import os
 from dotenv import load_dotenv
 import google.generativeai as palm
+from dotenv import load_dotenv
+
+load_dotenv()
+key = os.getenv("api")
 
 load_dotenv()
 
