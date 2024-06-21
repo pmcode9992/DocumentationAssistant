@@ -1,3 +1,4 @@
 DA/
 .env
-docuAssist/.DS_Store
+docuAssist/
+.DS_Store
