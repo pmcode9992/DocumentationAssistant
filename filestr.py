@@ -1,9 +1,14 @@
 import streamlit as st
 import os
+from dotenv import load_dotenv
 import google.generativeai as palm
 
+load_dotenv()
+
+key = os.getenv("api")
+
 def summarize_code(code_snippet):
-    palm.configure(api_key="AIzaSyDg2-QAcMEA2ZSgZx1IZL7G_-NCimGEEr0")
+    palm.configure(api_key=key)
     prompt = f"Summarize the following code:\n\n{code_snippet}\n\nSummary:"
     response = palm.generate_text(model="models/text-bison-001", prompt=prompt)
     
@@ -30,7 +35,7 @@ def genSummary(pth):
     
 def printDir(pth):
     l=[]
-    unwanted_files = ["Node Modules", ".DS_Store", "__pycache__"]
+    unwanted_files = ["Node Modules", ".DS_Store", "__pycache__", "DA"]
     if os.path.isdir(pth):
         l = os.listdir(pth)
         l = list(filter(lambda x : x not in unwanted_files, l))
@@ -41,7 +46,6 @@ def printDir(pth):
                 l[i] = {(l[i]) : genSummary((pth + "/" + l[i]))}
     return {pth : l}
 
-            
          
 st.write("Welcome to DocuAssist")
 # st.file_uploader("upload the root directory")
