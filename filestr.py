@@ -7,10 +7,6 @@ from dotenv import load_dotenv
 load_dotenv()
 key = os.getenv("api")
 
-load_dotenv()
-
-key = os.getenv("api")
-
 def summarize_code(code_snippet):
     palm.configure(api_key=key)
     prompt = f"Summarize the following code:\n\n{code_snippet}\n\nSummary:"
