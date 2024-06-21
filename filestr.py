@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+from dotenv import load_dotenv
 import google.generativeai as palm
 from dotenv import load_dotenv
 
@@ -34,7 +35,7 @@ def genSummary(pth):
     
 def printDir(pth):
     l=[]
-    unwanted_files = ["Node Modules", ".DS_Store", "__pycache__", "docuAssist"]
+    unwanted_files = ["Node Modules", ".DS_Store", "__pycache__", "docuAssist", "DA"]
     if os.path.isdir(pth):
         l = os.listdir(pth)
         l = list(filter(lambda x : x not in unwanted_files, l))
@@ -45,7 +46,6 @@ def printDir(pth):
                 l[i] = {(l[i]) : genSummary((pth + "/" + l[i]))}
     return {pth : l}
 
-            
          
 st.write("Welcome to DocuAssist")
 # st.file_uploader("upload the root directory")
