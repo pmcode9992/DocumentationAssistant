@@ -20,22 +20,25 @@ def summarize_code(code_snippet):
         return "No summary available."
 
 def genSummary(pth):
-    summary = ""
-    code_snippet = ""
-    with open(pth, "r") as file:
-        try:
-            code_snippet = file.read()
-            try: 
-                summary = summarize_code(code_snippet)
+    with open("allsummaries.txt", '+a') as summaryfile:
+        summary = ""
+        code_snippet = ""
+        with open(pth, "r") as file:
+            try:
+                code_snippet = file.read()
+                try: 
+                    summary = summarize_code(code_snippet)
+                    summaryfile.write(summary)
+                except:
+                    return "Error summarising"
             except:
-                return "Error summarising"
-        except:
-            return "Unreadable file"
+                return "Unreadable file"
+        summaryfile.close()
     return summary
     
-def printDir(pth):
+def printDir(pth):   
     l=[]
-    unwanted_files = ["Node Modules", ".DS_Store", "__pycache__", "docuAssist", "DA", ".git", ".env", ".gitignore", ".gitattributes"]
+    unwanted_files = ["Node Modules", ".DS_Store", "__pycache__", "docuAssist", "DA", ".git", ".env", ".gitignore", ".gitattributes", "allsummaries.txt"]
     if os.path.isdir(pth):
         l = os.listdir(pth)
         l = list(filter(lambda x : x not in unwanted_files, l))
@@ -43,16 +46,21 @@ def printDir(pth):
             if(os.path.isdir(pth + "/" + l[i])):
                 l[i] = printDir((pth + "/" + l[i]))
             else:
-                l[i] = {(l[i]) : genSummary((pth + "/" + l[i]))}
+                l[i] = {(l[i]) : genSummary(str(pth + "/" + l[i]))}
     return {pth : l}
-         
+
+
 st.write("Welcome to DocuAssist")
 
 initial_path = st.text_input("Enter complete path of root directory")
 if st.button("get file structure"):
+
     if not initial_path:
         st.error("Enter file path")
     else:
+        with open("allsummaries.txt", "w") as f:
+            f.write("Summary of all codes")
+            f.close()
         os.chdir(initial_path)
         with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
             list_ofpaths = [os.path.join(initial_path, f) for f in os.listdir(initial_path) if os.path.isfile(os.path.join(initial_path, f))]
