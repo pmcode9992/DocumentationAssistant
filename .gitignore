@@ -2,3 +2,4 @@ DA/
 .env
 docuAssist/
 .DS_Store
+__pycache__/
