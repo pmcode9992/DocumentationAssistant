@@ -1,0 +1,14 @@
+node_modules
+.env
+.gitignore
+tailwind.config.js
+.DS_Store
+README.md
+index.html
+package-lock.json
+reportWebVitals.js
+setupTests.js
+App.test.js
+public
+package.json
+assets

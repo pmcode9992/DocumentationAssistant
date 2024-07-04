@@ -1,0 +1,8 @@
+your_virtual_environment
+.env
+.DS_Store
+__pycache__
+.git
+README.md
+.gitattributes
+.gitignore

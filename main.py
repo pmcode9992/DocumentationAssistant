@@ -56,6 +56,7 @@ def num_tokens_from_string(string: str, encoding_name: str) -> int:
     return num_tokens
 
 filestr = None
+totalTokens = None
 
 st.write("Welcome to DocuAssist")
 
@@ -101,26 +102,29 @@ if st.button("get file structure") and docuIgnore:
         
         totalTokens = num_tokens_from_string(str(filestr), "cl100k_base")
         st.write("Total number of tokens in file structure  - " + str(totalTokens))
+
+
+        # Uncomment the code below when file structure is satisfactory - to generate summaries
+
+        # shortSummary = getDocumentJSON(filestr, "short")
+        # longSummary = getDocumentJSON(filestr, "long")
+        # st.write("Short Summaries")
+        # st.write(shortSummary)
+        # st.write("Long Summaries")
+        # st.write(longSummary)
+
+        # if totalTokens < contextWindow * 0.9:
+        #     st.write("Within context window")
+        #     projSummary = getProjectSummary(filestr)
+        #     st.write(projSummary)
+        # else:
+        #     projSummary = getProjectSummary(shortSummary)
+        #     st.write(projSummary)
+
+
     
-        shortSummary = getDocumentJSON(filestr, "short")
-        longSummary = getDocumentJSON(filestr, "long")
-        
-        if st.button("Generate Document"):
-            st.write("Short Summaries")
-            st.write(shortSummary)
-            st.write("Long Summaries")
-            st.write(longSummary)
-            
-            if totalTokens < contextWindow * 0.9:
-                st.write("Within context window")
-                projSummary = getProjectSummary(filestr)
-                st.write(projSummary)
-            else:
-                st.write("")
-                projSummary = getProjectSummary(filestr)
-                st.write(projSummary)
-            
-        
+    
+        #THREADS (to be updated)
         # with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
         #     list_ofpaths = [os.path.join(initial_path, f) for f in os.listdir(initial_path) if os.path.isfile(os.path.join(initial_path, f))]
         #     future_to_summary = {executor.submit(genSummary, pth): pth for pth in list_ofpaths}
