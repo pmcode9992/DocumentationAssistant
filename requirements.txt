@@ -3,4 +3,5 @@ google-generativeai
 python-dotenv
 tiktoken
 openai
-grpcio
+wheel
+reportlab

@@ -30,7 +30,6 @@ def getDocumentJSON(filestr, length):
     
     return filestr_copy
 
-
 def getSummary(codefile, length):
     
     load_dotenv()

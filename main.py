@@ -1,3 +1,4 @@
+
 import streamlit as st
 import os
 from dotenv import load_dotenv
@@ -6,6 +7,9 @@ import concurrent.futures
 from io import StringIO
 import tiktoken
 from utils.singlesession import getDocumentJSON, getProjectSummary
+from utils.gettokens import num_tokens_from_string
+from utils.projectstr import getProjectStructure, getFolderStructure
+from utils.genPDF import genratePDF
 
 load_dotenv()
 key = os.getenv("api")
@@ -22,41 +26,19 @@ contextWindow = int(os.getenv("contextWindow"))
 #     else:
 #         return "No summary available."
 
-def getFileData(pth):
-    summary = ""
-    code_snippet = ""
-    with open(pth, "r") as file:
-        try:
-            code_snippet = file.read()
-            try: 
-                summary = code_snippet
-            except:
-                return "Error summarising"
-        except:
-            return "Unreadable file"
-    return summary
-
-
-def getProjectStructure(pth, unwanted_files):   
-    l=[]
-    
-    if os.path.isdir(pth):
-        l = os.listdir(pth)
-        l = list(filter(lambda x : x not in unwanted_files, l))
-        for i in range(0, len(l)):
-            if(os.path.isdir(pth + "/" + l[i])):
-                l[i] = getProjectStructure((pth + "/" + l[i]), unwanted_files)
-            else:
-                l[i] = {(l[i]) : getFileData(str(pth + "/" + l[i]))}
-    return {"📁 :"+os.path.basename(pth) : l}
-
-def num_tokens_from_string(string: str, encoding_name: str) -> int:
-    encoding = tiktoken.get_encoding(encoding_name)
-    num_tokens = len(encoding.encode(string))
-    return num_tokens
-
 filestr = None
 totalTokens = None
+
+if "shortSum" not in st.session_state:
+    st.session_state["shortSum"] = None
+if "longSum" not in st.session_state:
+    st.session_state["longSum"] = None
+if "projSum" not in st.session_state:
+    st.session_state["projSum"] = None
+if "get_file_structure" not in st.session_state:
+    st.session_state["get_file_structure"] = False
+if "generate_doc" not in st.session_state:
+    st.session_state["generate_doc"] = False
 
 st.write("Welcome to DocuAssist")
 
@@ -81,8 +63,8 @@ elif docuIgnore == "List out files to be ignored":
                         ".gitignore\n")
     st.write(unwantedFiles)
 
-if st.button("get file structure") and docuIgnore:
-    
+if (st.button("get file structure") or st.session_state["get_file_structure"]) and docuIgnore:
+    st.session_state["get_file_structure"] = True
     if not initial_path:
         st.error("Enter file path")
     else:
@@ -95,6 +77,8 @@ if st.button("get file structure") and docuIgnore:
         
         os.chdir(initial_path)
         filestr = getProjectStructure(initial_path, unwantedFilesList)
+        foldrstr = getFolderStructure(initial_path, unwantedFilesList)
+        
         st.write("Your Project structure")
         st.write(filestr)
         st.write("Files/Folders to be ignored - ")
@@ -104,24 +88,35 @@ if st.button("get file structure") and docuIgnore:
         st.write("Total number of tokens in file structure  - " + str(totalTokens))
 
 
-        # Uncomment the code below when file structure is satisfactory - to generate summaries
 
-        # shortSummary = getDocumentJSON(filestr, "short")
-        # longSummary = getDocumentJSON(filestr, "long")
-        # st.write("Short Summaries")
-        # st.write(shortSummary)
-        # st.write("Long Summaries")
-        # st.write(longSummary)
+if st.button("Generate Document") and st.session_state["get_file_structure"]:   
+    st.session_state["generate_doc"] = True   
+    shortSummary = getDocumentJSON(filestr, "short")
+    longSummary = getDocumentJSON(filestr, "long")
+    projSummary = None
+    if totalTokens < contextWindow * 0.9:
+        projSummary = getProjectSummary(filestr)
+    else:
+        projSummary = getProjectSummary(shortSummary)
+    st.write(projSummary)
+    st.write("Short Summaries")
+    st.write(shortSummary)
+    st.write("Long Summaries")
+    st.write(longSummary)
+    
+    
+    st.session_state["shortSum"] = shortSummary
+    st.session_state["longSum"] = longSummary
+    st.session_state["projSum"] = projSummary
 
-        # if totalTokens < contextWindow * 0.9:
-        #     st.write("Within context window")
-        #     projSummary = getProjectSummary(filestr)
-        #     st.write(projSummary)
-        # else:
-        #     projSummary = getProjectSummary(shortSummary)
-        #     st.write(projSummary)
-
-
+# if st.button("Download PDF") and st.session_state["generate_doc"] and (st.session_state["projSum"] and st.session_state["longSum"]):
+#     # st.write(st.session_state["projSum"])
+#     # st.write(st.session_state["shortSum"])
+#     # st.write(st.session_state["longSum"])
+#     st.write("⏳ Making your pdf")
+    
+#     genratePDF("Signature Scribbles",foldrstr, st.session_state["projSum"], st.session_state["longSum"])
+    
     
     
         #THREADS (to be updated)
