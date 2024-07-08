@@ -1,4 +1,4 @@
-##Signature Scribbles
+## Signature Scribbles
 
 The project is a web application developed using React for creating a platform called Signature Scribbles. The application includes features like journaling, user authentication using Firebase, and social media integration. The technologies used include React, Firebase (for authentication), and Tailwind CSS for styling. The project consists of various components such as Navbar, Carousel, Login, About, Home, Benefits, Contact, and Nopage. The functionalities of the application include displaying information about the company, showcasing benefits of journaling, providing contact details, and allowing users to log in using Google authentication. The application also includes a responsive design with animations for improved user experience.
 
