@@ -9,6 +9,7 @@ import tiktoken
 from utils.singlesession import getDocumentJSON, getProjectSummary
 from utils.gettokens import num_tokens_from_string
 from utils.projectstr import getProjectStructure, getFolderStructure
+from utils.genMarkdown import genMarkdown
 
 load_dotenv()
 key = os.getenv("api")
@@ -27,6 +28,7 @@ contextWindow = int(os.getenv("contextWindow"))
 
 filestr = None
 totalTokens = None
+projectName = "Project"
 
 if "shortSum" not in st.session_state:
     st.session_state["shortSum"] = None
@@ -38,53 +40,57 @@ if "get_file_structure" not in st.session_state:
     st.session_state["get_file_structure"] = False
 if "generate_doc" not in st.session_state:
     st.session_state["generate_doc"] = False
+if "foldrstr" not in st.session_state:
+    st.session_state["foldrstr"] = None
 
 st.write("Welcome to DocuAssist")
+with st.sidebar:
+    projectName = st.text_input("Enter project name")
+    initial_path = st.text_input("Enter complete path of root directory")
 
-initial_path = st.text_input("Enter complete path of root directory")
+    docuIgnore = st.radio("I would like to :",
+                ["Upload docuignore file", "List out files to be ignored", "Auto generate docuignore"],
+                captions = ["Similar to .gitignore, specify which files and directories should be ignored and not tracked. It helps prevent certain files, like temporary files, build artifacts, and sensitive information, from being included in the documentation.","learn more : https://www.w3schools.com/git/git_ignore.asp?remote=github","Use AI to get list of files to be ignored"], index=1, disabled=True)
 
-docuIgnore = st.radio("I would like to :",
-            ["Upload docuignore file", "List out files to be ignored", "Auto generate docuignore"],
-            captions = ["Similar to .gitignore, specify which files and directories should be ignored and not tracked. It helps prevent certain files, like temporary files, build artifacts, and sensitive information, from being included in the documentation.","learn more : https://www.w3schools.com/git/git_ignore.asp?remote=github","Use AI to get list of files to be ignored"], index=1, disabled=True)
+    if docuIgnore == "Upload docuignore file":
+        uploaded_file = st.file_uploader("Choose a file")
+        if uploaded_file is not None:
+            stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
+            st.write(stringio)
+            unwantedFiles = stringio.read()
+            st.write(unwantedFiles)
 
-if docuIgnore == "Upload docuignore file":
-    uploaded_file = st.file_uploader("Choose a file")
-    if uploaded_file is not None:
-        stringio = StringIO(uploaded_file.getvalue().decode("utf-8"))
-        st.write(stringio)
-        unwantedFiles = stringio.read()
+    elif docuIgnore == "List out files to be ignored":
+        unwantedFiles = st.text_area("Enter file/folder names to be ignored",
+                            "node_modules\n" 
+                            ".env\n" 
+                            ".gitignore\n")
         st.write(unwantedFiles)
 
-elif docuIgnore == "List out files to be ignored":
-    unwantedFiles = st.text_area("Enter file/folder names to be ignored",
-                        "node_modules\n" 
-                        ".env\n" 
-                        ".gitignore\n")
-    st.write(unwantedFiles)
-
-if (st.button("get file structure") or st.session_state["get_file_structure"]) and docuIgnore:
-    st.session_state["get_file_structure"] = True
-    if not initial_path:
-        st.error("Enter file path")
-    else:
-        # if docuIgnore == "Auto generate docuignore":
-        #     os.chdir(initial_path)
-        #     unwantedFiles = ["Banana\nBread"]
-        #     projectStr = getProjectStructure(initial_path, unwantedFiles)
+    if (st.button("get file structure") or st.session_state["get_file_structure"]) and docuIgnore:
+        st.session_state["get_file_structure"] = True
+        if not initial_path:
+            st.error("Enter file path")
+        else:
+            # if docuIgnore == "Auto generate docuignore":
+            #     os.chdir(initial_path)
+            #     unwantedFiles = ["Banana\nBread"]
+            #     projectStr = getProjectStructure(initial_path, unwantedFiles)
+                
+            unwantedFilesList = unwantedFiles.split()
             
-        unwantedFilesList = unwantedFiles.split()
-        
-        os.chdir(initial_path)
-        filestr = getProjectStructure(initial_path, unwantedFilesList)
-        foldrstr = getFolderStructure(initial_path, unwantedFilesList)
-        
-        st.write("Your Project structure")
-        st.write(filestr)
-        st.write("Files/Folders to be ignored - ")
-        st.write(unwantedFilesList)
-        
-        totalTokens = num_tokens_from_string(str(filestr), "cl100k_base")
-        st.write("Total number of tokens in file structure  - " + str(totalTokens))
+            os.chdir(initial_path)
+            filestr = getProjectStructure(initial_path, unwantedFilesList)
+            foldrstr = getFolderStructure(initial_path, unwantedFilesList)
+            st.session_state["foldrstr"] = foldrstr
+            
+            st.write("Your Project structure")
+            st.write(foldrstr)
+            st.write("Files/Folders to be ignored - ")
+            st.write(unwantedFilesList)
+            
+            totalTokens = num_tokens_from_string(str(filestr), "cl100k_base")
+            st.write("Total number of tokens in file structure  - " + str(totalTokens))
 
 
 
@@ -113,8 +119,10 @@ if st.button("Get file") and st.session_state["generate_doc"] and (st.session_st
     # st.write(st.session_state["shortSum"])
     # st.write(st.session_state["longSum"])
     st.write("⏳ Making your file")
+
     
-    # genMarkdown("Signature Scribbles", )
+    
+    genMarkdown(projectName,st.session_state["projSum"], st.session_state["foldrstr"], st.session_state["longSum"]  )
     
     
         #THREADS (to be updated)

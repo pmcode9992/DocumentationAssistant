@@ -2,22 +2,25 @@ def formatSummary(filestr, summary, indent = 0):
     output = ""
     if isinstance(filestr, dict):
         for item, value in filestr.items():
-            if value is None and not summary:
-                output += ("     " * indent+ f"{value}\n")
+            if (value is None) and (not summary):
+                output += ("     " * indent+ f"{item}\n")
             elif isinstance(value, str) and summary:
                 output += f"#{item}\n\n{value}\n"
             else:
                 output += formatSummary(value, summary, indent + 1)
     else:
         for i in filestr:
-            output += formatSummary(i, summary, indent+ 1)
+            output += formatSummary(i, summary, indent)
     return output
         
 
-def genMarkdown(projName, projSummary, longSummary):
+def genMarkdown(projName, projSummary, folderstr, longSummary):
     with open(f"{projName}.md", 'w', encoding='utf-8') as f:
         f.write(f"##{projName}\n\n")
         f.write(projSummary)
+        f.write("\n\n")
+        formatted_folderstr = formatSummary(folderstr, False)
+        f.write(formatted_folderstr)
         f.write("\n\n")
         formatted_longSummary = formatSummary(longSummary, True)
         f.write(formatted_longSummary)
@@ -87,4 +90,62 @@ longSummary = {
   ]
 }
 
-genMarkdown("Signature Scribbles", projSummary, longSummary)
+foldrstr = {
+  "📁 :sign": [
+    # {
+    #   "project_Summary.pdf": "Not a code file"
+    # },
+    {
+      "📁 :src": [
+        {
+          "index.js": None
+        },
+        {
+          "index.css": None
+        },
+        {
+          "📁 :components": [
+            {
+              "Navbar.js": None
+            },
+            {
+              "Carousel.js": None
+            }
+          ]
+        },
+        {
+          "📁 :firebase": [
+            {
+              "authsetup.js": None
+            },
+            {
+              "config.js": None
+            }
+          ]
+        },
+        {
+          "📁 :pages": [
+            {
+              "About.js": None
+            },
+            {
+              "Home.js": None
+            },
+            {
+              "Login.js": None
+            },
+            {
+              "Nopage.js": None
+            },
+            {
+              "Contact.js": None
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+
+genMarkdown("Signature Scribbles", projSummary,foldrstr, longSummary)
