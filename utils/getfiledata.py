@@ -5,7 +5,7 @@ def getFileData(pth):
         try:
             code_snippet = file.read()
             try: 
-                summary = code_snippet
+                summary = pth + code_snippet
             except:
                 return "Error summarising"
         except:

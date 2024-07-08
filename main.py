@@ -10,6 +10,7 @@ from utils.singlesession import getDocumentJSON, getProjectSummary
 from utils.gettokens import num_tokens_from_string
 from utils.projectstr import getProjectStructure, getFolderStructure
 from utils.genMarkdown import genMarkdown
+from utils.downloadFile import download_markdown_file
 
 load_dotenv()
 key = os.getenv("api")
@@ -67,30 +68,31 @@ with st.sidebar:
                             ".gitignore\n")
         st.write(unwantedFiles)
 
-    if (st.button("get file structure") or st.session_state["get_file_structure"]) and docuIgnore:
-        st.session_state["get_file_structure"] = True
-        if not initial_path:
-            st.error("Enter file path")
-        else:
-            # if docuIgnore == "Auto generate docuignore":
-            #     os.chdir(initial_path)
-            #     unwantedFiles = ["Banana\nBread"]
-            #     projectStr = getProjectStructure(initial_path, unwantedFiles)
-                
-            unwantedFilesList = unwantedFiles.split()
+if (st.button("get file structure") or st.session_state["get_file_structure"]) and docuIgnore:
+    st.session_state["get_file_structure"] = True
+    if not initial_path:
+        st.error("Enter file path")
+    else:
+        # if docuIgnore == "Auto generate docuignore":
+        #     os.chdir(initial_path)
+        #     unwantedFiles = ["Banana\nBread"]
+        #     projectStr = getProjectStructure(initial_path, unwantedFiles)
             
-            os.chdir(initial_path)
-            filestr = getProjectStructure(initial_path, unwantedFilesList)
-            foldrstr = getFolderStructure(initial_path, unwantedFilesList)
-            st.session_state["foldrstr"] = foldrstr
-            
+        unwantedFilesList = unwantedFiles.split()
+        
+        os.chdir(initial_path)
+        filestr = getProjectStructure(initial_path, unwantedFilesList)
+        foldrstr = getFolderStructure(initial_path, unwantedFilesList)
+        st.session_state["foldrstr"] = foldrstr
+        
+        showfoldrs = st.toggle("Show folder structure")
+        
+        if showfoldrs:
             st.write("Your Project structure")
             st.write(foldrstr)
-            st.write("Files/Folders to be ignored - ")
-            st.write(unwantedFilesList)
-            
-            totalTokens = num_tokens_from_string(str(filestr), "cl100k_base")
-            st.write("Total number of tokens in file structure  - " + str(totalTokens))
+        
+        totalTokens = num_tokens_from_string(str(filestr), "cl100k_base")
+        st.write("Total number of tokens in file structure  - " + str(totalTokens))
 
 
 
@@ -103,27 +105,19 @@ if st.button("Generate Document") and st.session_state["get_file_structure"]:
         projSummary = getProjectSummary(filestr)
     else:
         projSummary = getProjectSummary(shortSummary)
-    st.write(projSummary)
-    st.write("Short Summaries")
-    st.write(shortSummary)
-    st.write("Long Summaries")
-    st.write(longSummary)
-    
     
     st.session_state["shortSum"] = shortSummary
     st.session_state["longSum"] = longSummary
     st.session_state["projSum"] = projSummary
 
-if st.button("Get file") and st.session_state["generate_doc"] and (st.session_state["projSum"] and st.session_state["longSum"]):
-    # st.write(st.session_state["projSum"])
-    # st.write(st.session_state["shortSum"])
-    # st.write(st.session_state["longSum"])
-    st.write("⏳ Making your file")
-
+    st.write("🎉Your Document has been saved into the project folder")
+    markdown_content = genMarkdown(projectName,st.session_state["projSum"], st.session_state["foldrstr"], st.session_state["longSum"]  )
     
+    st.write("Download here")
+    download_markdown_file(markdown_content[0], markdown_content[1])
     
-    genMarkdown(projectName,st.session_state["projSum"], st.session_state["foldrstr"], st.session_state["longSum"]  )
-    
+    st.write("Documentation\n\n")
+    st.markdown(markdown_content[0])
     
         #THREADS (to be updated)
         # with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
