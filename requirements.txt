@@ -4,4 +4,5 @@ python-dotenv
 tiktoken
 openai
 wheel
+pypdf2
 reportlab

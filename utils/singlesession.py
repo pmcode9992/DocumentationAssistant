@@ -48,13 +48,13 @@ def getSummary(codefile, length):
     if length == "long":
         data = {
             "model" : "gpt-3.5-turbo",
-            "messages": [{"role": "user", "content": ("You are responsible for project documentation, in my project.Prepare brief documentation for this code" + codefile)}],
+            "messages": [{"role": "user", "content": ("You are responsible for project documentation, in my project.Prepare documentation for this code as per guidelines. \nGuidelines \n- Markdown format \n- Include important code snippets if needed \n- explain the imports, and each of the functions\n Order of contents is Filename, brief explanation, imports, functionalities(with small code snippets)" + codefile)}],
             "temperature": 0.7,
         }
     else:
         data = {
             "model" : "gpt-3.5-turbo",
-            "messages": [{"role": "user", "content": ("Explain this code in very short.\n" + codefile)}],
+            "messages": [{"role": "user", "content": ("You are responsible for project documentation, explain this code in very short\n" + codefile)}],
             "temperature": 0.7,
         }
     response = requests.post(API_URL, headers=headers, json=data)

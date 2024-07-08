@@ -9,7 +9,6 @@ import tiktoken
 from utils.singlesession import getDocumentJSON, getProjectSummary
 from utils.gettokens import num_tokens_from_string
 from utils.projectstr import getProjectStructure, getFolderStructure
-from utils.genPDF import genratePDF
 
 load_dotenv()
 key = os.getenv("api")
@@ -109,14 +108,13 @@ if st.button("Generate Document") and st.session_state["get_file_structure"]:
     st.session_state["longSum"] = longSummary
     st.session_state["projSum"] = projSummary
 
-# if st.button("Download PDF") and st.session_state["generate_doc"] and (st.session_state["projSum"] and st.session_state["longSum"]):
-#     # st.write(st.session_state["projSum"])
-#     # st.write(st.session_state["shortSum"])
-#     # st.write(st.session_state["longSum"])
-#     st.write("⏳ Making your pdf")
+if st.button("Get file") and st.session_state["generate_doc"] and (st.session_state["projSum"] and st.session_state["longSum"]):
+    # st.write(st.session_state["projSum"])
+    # st.write(st.session_state["shortSum"])
+    # st.write(st.session_state["longSum"])
+    st.write("⏳ Making your file")
     
-#     genratePDF("Signature Scribbles",foldrstr, st.session_state["projSum"], st.session_state["longSum"])
-    
+    # genMarkdown("Signature Scribbles", )
     
     
         #THREADS (to be updated)
