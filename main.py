@@ -16,17 +16,6 @@ load_dotenv()
 key = os.getenv("api")
 contextWindow = int(os.getenv("contextWindow"))
 
-# def summarize_code(code_snippet):
-#     palm.configure(api_key=key)
-#     prompt = f"Summarize the following code:\n\n{code_snippet}\n\nSummary:"
-#     response = palm.generate_text(model="models/text-bison-001", prompt=prompt)
-    
-#     if response and response.candidates:
-#         summary = response.candidates[0].get('output', 'No summary available').strip()
-#         return summary
-#     else:
-#         return "No summary available."
-
 filestr = None
 totalTokens = None
 projectName = "Project"
@@ -119,15 +108,17 @@ if st.button("Generate Document") and st.session_state["get_file_structure"]:
     st.write("Documentation\n\n")
     st.markdown(markdown_content[0])
     
-        #THREADS (to be updated)
-        # with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        #     list_ofpaths = [os.path.join(initial_path, f) for f in os.listdir(initial_path) if os.path.isfile(os.path.join(initial_path, f))]
-        #     future_to_summary = {executor.submit(genSummary, pth): pth for pth in list_ofpaths}
-        #     for future in concurrent.futures.as_completed(future_to_summary):
-        #         summary_result = future_to_summary[future]
-        #         try:
-        #             summary = future.result()
-        #             print(f"Summary for {summary_result}: {summary}")
-        #         except Exception as exc:
-        #             print(f"Error processing {summary_result}: {exc}")
+# THREADS (to be updated)
+
+# with concurrent.futures.ThreadPoolExecutor() as executor:
+#     list_ofpaths = [os.path.join(initial_path, f) for f in os.listdir(initial_path) if os.path.isfile(os.path.join(initial_path, f))]
+#     future_to_summary = {executor.submit(genSummary, pth): pth for pth in list_ofpaths}
+#     for future in concurrent.futures.as_completed(future_to_summary):
+#         summary_result = future_to_summary[future]
+#         try:
+#             summary = future.result()
+#             print(f"Summary for {summary_result}: {summary}")
+#         except Exception as exc:
+#             print(f"Error processing {summary_result}: {exc}")
             
+
