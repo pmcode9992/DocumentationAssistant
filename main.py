@@ -6,11 +6,12 @@ from dotenv import load_dotenv
 import concurrent.futures
 from io import StringIO
 import tiktoken
-from utils.singlesession import getDocumentJSON, getProjectSummary
+from utils.singlesession import getDocumentJSON_SHORT,getDocumentJSON_LONG, getProjectSummary
 from utils.gettokens import num_tokens_from_string
 from utils.projectstr import getProjectStructure, getFolderStructure
 from utils.genMarkdown import genMarkdown
 from utils.downloadFile import download_markdown_file
+
 
 load_dotenv()
 key = os.getenv("api")
@@ -83,12 +84,10 @@ if (st.button("get file structure") or st.session_state["get_file_structure"]) a
         totalTokens = num_tokens_from_string(str(filestr), "cl100k_base")
         st.write("Total number of tokens in file structure  - " + str(totalTokens))
 
-
-
 if st.button("Generate Document") and st.session_state["get_file_structure"]:   
     st.session_state["generate_doc"] = True   
-    shortSummary = getDocumentJSON(filestr, "short")
-    longSummary = getDocumentJSON(filestr, "long")
+    shortSummary = getDocumentJSON_SHORT(filestr, "short")
+    longSummary = getDocumentJSON_LONG(filestr,shortSummary, "long")
     projSummary = None
     if totalTokens < contextWindow * 0.9:
         projSummary = getProjectSummary(filestr)
@@ -108,6 +107,7 @@ if st.button("Generate Document") and st.session_state["get_file_structure"]:
     st.write("Documentation\n\n")
     st.markdown(markdown_content[0])
     
+
 # THREADS (to be updated)
 
 # with concurrent.futures.ThreadPoolExecutor() as executor:

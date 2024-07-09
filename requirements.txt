@@ -4,5 +4,6 @@ python-dotenv
 tiktoken
 openai
 wheel
-pypdf2
-reportlab
+langchain-text-splitters
+langchain
+langchain-community
