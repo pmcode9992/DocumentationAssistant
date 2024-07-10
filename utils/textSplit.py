@@ -1,11 +1,19 @@
 from langchain_text_splitters import (RecursiveCharacterTextSplitter, Language)
 
-def getChunks(code):
+def getChunks(code, lang):
+    l = "CPP"
+    if lang == "py":
+        lang = "python"
+    for e in Language:
+        if e.value == lang:
+            l = e.name
+            
+            
     splits = []
     text_splitter = RecursiveCharacterTextSplitter.from_language(
-        language= Language.PYTHON,
-        chunk_size=3000,
-        chunk_overlap=750
+        language= getattr(Language, l ),
+        chunk_size=1500,
+        chunk_overlap=300
     )
     splits = text_splitter.create_documents([code])
     
@@ -15,13 +23,3 @@ def getChunks(code):
             f.write(str(line) + "\n\n")
         f.close()
     return splits
-
-# text = []
-# with open("decisiontree.py") as f:
-#     code = f.read()
-#     text = getChunks(code)
-#     print(len(text))
-#     f.close()
-
-
-    

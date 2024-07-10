@@ -1,5 +1,5 @@
-4
-page_content='/Users/pranav/Documents/GitHub/DocumentationAssistant/DocuTest/decisiontree.pyimport logging
+9
+page_content='import logging
 import socket
 import struct
 import subprocess as sp
@@ -9,18 +9,29 @@ from itertools import repeat
 from color import Text, Background, Cursor
 
 vertical_header = " |A|B|C|D|E|F|G|H|I|J| "
-FIELDS = [EMPTY, OWN_SHIP, OWN_SHIP_HIT, ENEMY_SHIP_HIT, MISS, OWN_SHIP_ENEMY_SHIP_HIT] = 0, 1, 2, 3, 4, 5
-SHIP_TYPES = [BATTLESHIP, CRUISER, DESTROYER, SUBMARINE] = 5, 4, 3, 2  # supported ship types
+FIELDS = [
+    EMPTY,
+    OWN_SHIP,
+    OWN_SHIP_HIT,
+    ENEMY_SHIP_HIT,
+    MISS,
+    OWN_SHIP_ENEMY_SHIP_HIT,
+] = (0, 1, 2, 3, 4, 5)
+SHIP_TYPES = [BATTLESHIP, CRUISER, DESTROYER, SUBMARINE] = (
+    5,
+    4,
+    3,
+    2,
+)  # supported ship types
 SHIP_NAMES = {
     BATTLESHIP: "Battleship",
     CRUISER: "Cruiser",
     DESTROYER: "Destroyer",
-    SUBMARINE: "Submarine"
+    SUBMARINE: "Submarine",
 }
-PLAYER_SHIPS = [BATTLESHIP, SUBMARINE]  # change this according to your needs
+PLAYER_SHIPS = [BATTLESHIP, SUBMARINE]  # change this according to your needs'
 
-
-class Error(ValueError):
+page_content='class Error(ValueError):
     def __init__(self, *args):
         logging.error(str(self))
         super().__init__(*args)
@@ -35,7 +46,7 @@ def coord_valid(c: int):
 
 
 def print_boards(board, enemy_board):
-    
+
     s = "      Your Board  \t\t       Enemy Board\n\r"
     s += vertical_header + "\t\t" + vertical_header + "\n\r"
     for i, rows in enumerate(zip(board, enemy_board)):
@@ -68,18 +79,17 @@ def print_boards(board, enemy_board):
 
     s += vertical_header + "\t\t" + vertical_header + "\n\r"
     # clear the screen on OSX and linux
-    _ = sp.call('clear', shell=True)
+    _ = sp.call("clear", shell=True)
     print(s)
-    return
+    return'
 
+page_content='def create_empty_board():
 
-def create_empty_board():
-    
     return [10 * [0] for _ in repeat(0, 10)]
 
 
 def update_player_board(shot, board):
-    
+
     x = shot.x
     y = shot.y
     field = board[y][x]
@@ -110,23 +120,27 @@ page_content='class Shot:
     last_shot_hit: bool = False
 
     def __bytes__(self):
-        if self.x >= 2 ** 4:
-            raise Error(f"X={self.x} is too large to fit into 4 bit: {hex(self.x)} > 0xf.")
-        if self.y >= 2 ** 4:
-            raise Error(f"X={self.y} is too large to fit into 4 bit: {hex(self.y)} > 0xf.")
+        if self.x >= 2**4:
+            raise Error(
+                f"X={self.x} is too large to fit into 4 bit: {hex(self.x)} > 0xf."
+            )
+        if self.y >= 2**4:
+            raise Error(
+                f"X={self.y} is too large to fit into 4 bit: {hex(self.y)} > 0xf."
+            )
 
         return struct.pack("!BB", (self.x << 4) | self.y, int(self.last_shot_hit) << 7)
 
     @staticmethod
     def decode(pkt):
         xy, h = struct.unpack("!BB", pkt)
-        return Shot(xy >> 4, xy & 0xf, h >> 7)'
+        return Shot(xy >> 4, xy & 0xF, h >> 7)'
 
 page_content='class Network:
     BUFSIZE = 16
 
     def __init__(self, host, port, is_server):
-        
+
         self.is_server = is_server
         self.sock = None
         self.conn = None
@@ -170,6 +184,17 @@ page_content='class Network:
 
     def _client_recv(self):
         data = self.sock.recv(self.BUFSIZE)
+        return data'
+
+page_content='logging.debug("Waiting for Data")
+        while True:
+            data = self.conn.recv(self.BUFSIZE)
+            if not data:
+                break
+            return data
+
+    def _client_recv(self):
+        data = self.sock.recv(self.BUFSIZE)
         return data
 
     def recv(self):
@@ -191,18 +216,17 @@ page_content='class Network:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         # enables context manager
-        self.close()
+        self.close()'
 
-
-def pre_process_string(s):
+page_content='def pre_process_string(s):
     s = s.lower()
 
     def wanted(c):
-        return c.isalnum() or c == '-' or ord(c) in range(ord("a"), ord("k"))
+        return c.isalnum() or c == "-" or ord(c) in range(ord("a"), ord("k"))
 
     ascii_characters = [chr(ordinal) for ordinal in range(128)]
     ascii_code_point_filter = [c if wanted(c) else None for c in ascii_characters]
-    s = s.encode('ascii', errors='ignore').decode('ascii')
+    s = s.encode("ascii", errors="ignore").decode("ascii")
     return s.translate(ascii_code_point_filter)
 
 
@@ -237,31 +261,7 @@ def ask_player_for_shot():
         except Error:
             pass'
 
-page_content='def parse_shot(s):
-    # be gentle
-    s = pre_process_string(s)
-    s = s.lower().replace(" ", "")
-
-    if len(s) < 2:
-        raise Error("Invalid String provided")
-
-    # convert input into numbers between 0 and 9
-    try:
-        x = ord(s[0]) - 97
-        y = int(s[1])
-    except ValueError:
-        raise Error("Invalid String provided")
-
-    if not coord_valid(x):
-        raise Error("X out of bounds")
-
-    if not coord_valid(y):
-        raise Error("Y out of bounds")
-
-    return x, y, False
-
-
-def ask_player_for_shot():
+page_content='def ask_player_for_shot():
     while 1:
         try:
             return parse_shot(input("Shoot (Format XY, e.g. A4): "))
@@ -272,7 +272,9 @@ def ask_player_for_shot():
 def ask_player_for_ship(ship_type):
     length = ship_type
     while True:
-        s = input(f"Place your {SHIP_NAMES.get(ship_type)} (length: {length}) formatted as XX - YY (e.g. A1-A5): ")
+        s = input(
+            f"Place your {SHIP_NAMES.get(ship_type)} (length: {length}) formatted as XX - YY (e.g. A1-A5): "
+        )
         # assume the following format: XX - YY and ask until the user enters something valid
         try:
             a, b = s.lower().replace(" ", "").split("-")
@@ -299,10 +301,9 @@ def ask_player_for_ship(ship_type):
             return (a0, a1), (b0, b1)
 
         except (IndexError, ValueError) as e:
-            print_err("Invalid Format: ", str(e))
+            print_err("Invalid Format: ", str(e))'
 
-
-def place_ship(a, b, board):
+page_content='def place_ship(a, b, board):
     a0, a1 = a
     b0, b1 = b
 

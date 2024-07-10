@@ -23,7 +23,7 @@ def getDocumentJSON_SHORT(filestr, length):
             if isinstance(value, str) and (key.split('.')[-1] in code_file_extensions):           
                 filestr_copy[key] = getSummary(value, length)
             elif isinstance(value, str) and key.split('.')[-1] not in code_file_extensions:
-                filestr_copy[key] = "Not a code file"
+                filestr_copy[key] = ""
             else:
                 filestr_copy[key] = getDocumentJSON_SHORT(value, length)
     else:
@@ -45,13 +45,12 @@ def getDocumentJSON_LONG(filestr, shortSummary, length):
         for key, value in filestr_copy.items():
             if isinstance(value, str) and (key.split('.')[-1] in code_file_extensions):           
                 if num_tokens_from_string(value, "cl100k_base") < 750:
-                    print("HIIIIII")
-                    filestr_copy[key] = getSummary(value)
+                    filestr_copy[key] = getSummary(value, length)
                 else:
-                    filestr_copy[key] = sumChunks(shortSummary[key], value)
+                    filestr_copy[key] = sumChunks(shortSummary[key], value, key.split('.')[-1])
                 
             elif isinstance(value, str) and key.split('.')[-1] not in code_file_extensions:
-                filestr_copy[key] = "Not a code file"
+                filestr_copy[key] = ""
             else:
                 filestr_copy[key] = getDocumentJSON_LONG(value, shortSummary[key] , length)
     else:
@@ -71,19 +70,19 @@ def getSummary(codefile, length):
     client = OpenAI(
     organization='org-kf9It3OCjQvnf6UtiL9lJLQx',
     project='proj_mlnucjj9ruxVKvFjDAdgHIKP',
-    api_key= API_KEY
+    api_key= API_KEY,
     )    
     if length == "long":
         data = {
             "model" : "gpt-3.5-turbo",
-            "messages": [{"role": "user", "content": (context+"You are responsible for project documentation, in my project.Prepare documentation for this code as per guidelines. \nGuidelines \n- Markdown format \n- Include important code snippets if needed \n- explain the imports, and each of the functions\n Order of contents is Filename(title), brief explanation, imports, functionalities(with small code snippets)" + codefile)}],
+            "messages": [{"role": "user", "content": ("You are responsible for project documentation, in my project.Prepare documentation for this code as per guidelines. \nGuidelines \n- Markdown format \n- Include important code snippets if needed \n- explain the imports, and each of the functions\n Order of contents is Filename(title), brief explanation, imports, functionalities(with small code snippets)" + codefile)}],
             "temperature": 0.7,
         }
     else:
         data = {
             "model" : "gpt-3.5-turbo",
-            "messages": [{"role": "user", "content": ("You are responsible for project documentation, explain this code in very short\n" + codefile)}],
-            "temperature": 0.7,
+            "messages": [{"role": "user", "content": ("You are responsible for project documentation, explain this code in very short (under 700 tokens)\n" + codefile)}],
+            "temperature": 0.7
         }
     response = requests.post(API_URL, headers=headers, json=data)
 
