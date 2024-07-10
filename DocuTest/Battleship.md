@@ -1,3 +1,13 @@
+## Battleship
+
+
+The project "DocuTest" is a Python program that implements the classic game of Battleship. It uses various technologies such as logging, sockets, and dataclasses. The program allows for two players to connect over a network and play against each other. The game features a graphical user interface that displays both the player's own board and the enemy's board. It also allows players to place their ships on the board and take turns guessing the location of the opponent's ships. The program includes error handling and input validation to ensure smooth gameplay. 
+
+     Battleship.py
+
+
+#Battleship.py
+
 
 
     ### Class - Person
@@ -168,4 +178,5 @@ If the coordinates are successfully placed, the function returns. Otherwise, an 
 This function iterates through all the ships in the PLAYER_SHIPS array and asks the player for coordinates to place each ship on their own board. The function also prints both the player's board and the enemy board (to give the player an idea of where the enemy ships might be). 
 
 If the player successfully places a ship, the function breaks out of the loop and moves on to the next ship. If the player enters invalid coordinates, an error is raised and they must
+
 

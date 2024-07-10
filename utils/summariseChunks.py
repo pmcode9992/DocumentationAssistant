@@ -21,13 +21,15 @@ def sumChunks(shortSummary, code, lang):
     Output Format(Markdown)- \n
     (for imports) \n
     ### <<Import name>>\n
-    <<Explanation>>
+    <<short Explanation>>
     \n
     (for classes and functions)\n
     ### <<Class, Function name>>\n
-    <<Explanation>>\n
+     <<Brief code snippet>> \n
+    <<Explanation>>
+    \n
     (for anything else)
-    <<code snippet>>\n
+    <<Code snippet (body text)>>\n
     <<Explanation>>
     
     \n\n Context - {context[0]} \n\n Next chunk of code- {chunk}"""

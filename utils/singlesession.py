@@ -1,5 +1,5 @@
 
-from openai import OpenAI
+from langchain_community.llms import OpenAI 
 from dotenv import load_dotenv
 import os
 import requests
@@ -62,60 +62,29 @@ def getSummary(codefile, length):
     
     load_dotenv()
     API_KEY = os.getenv("SingleSession_APIKEY")
-    API_URL = "https://api.openai.com/v1/chat/completions"
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {API_KEY}'
-    }
-    client = OpenAI(
-    organization='org-kf9It3OCjQvnf6UtiL9lJLQx',
-    project='proj_mlnucjj9ruxVKvFjDAdgHIKP',
-    api_key= API_KEY,
-    )    
+    llm = OpenAI(api_key=API_KEY) 
     if length == "long":
-        data = {
-            "model" : "gpt-3.5-turbo",
-            "messages": [{"role": "user", "content": ("You are responsible for project documentation, in my project.Prepare documentation for this code as per guidelines. \nGuidelines \n- Markdown format \n- Include important code snippets if needed \n- explain the imports, and each of the functions\n Order of contents is Filename(title), brief explanation, imports, functionalities(with small code snippets)" + codefile)}],
-            "temperature": 0.7,
-        }
+        prompt_template= """
+        You are responsible for project documentation, in my project.Prepare documentation for this code as per guidelines. \nGuidelines \n- Markdown format \n- Include important code snippets if needed \n- explain the imports, and each of the functions\n Order of contents is Filename(title), brief explanation, imports, functionalities(with small code snippets 
+        \n\n
+        {codefile}
+        """
     else:
-        data = {
-            "model" : "gpt-3.5-turbo",
-            "messages": [{"role": "user", "content": ("You are responsible for project documentation, explain this code in very short (under 700 tokens)\n" + codefile)}],
-            "temperature": 0.7
-        }
-    response = requests.post(API_URL, headers=headers, json=data)
-
-    if response.status_code == 200:
-        return response.json()['choices'][0]['message']['content']
-        
-    else:
-        return f"Error: {response.status_code}, {response.text}"
-
-def getProjectSummary(context):
+        prompt_template = """
+        You are responsible for project documentation, explain this code in very short\n\n
+        {codefile}
+        """
+    prompt = prompt_template.format(codefile = codefile)
+    response = llm.generate(prompts=[prompt])
+    return response.generations[0][0].text
     
+def getProjectSummary(context):
     load_dotenv()
     API_KEY = os.getenv("SingleSession_APIKEY")
-    API_URL = "https://api.openai.com/v1/chat/completions"
-    headers = {
-        'Content-Type': 'application/json',
-        'Authorization': f'Bearer {API_KEY}'
-    }
-    client = OpenAI(
-    organization='org-kf9It3OCjQvnf6UtiL9lJLQx',
-    project='proj_mlnucjj9ruxVKvFjDAdgHIKP',
-    api_key= API_KEY
-    )
-    data = {
-        "model" : "gpt-3.5-turbo",
-        "messages": [{"role": "user", "content": (str(context) + "\n\nYou are responsible for project documentation. Given short summaries of each codefile, from context. create an overall summary of the project, technologies used, what it's functionalities are.")}],
-        "temperature": 0.7,
-    }
-
-    response = requests.post(API_URL, headers=headers, json=data)
-
-    if response.status_code == 200:
-        return response.json()['choices'][0]['message']['content']
-        
-    else:
-        return f"Error: {response.status_code}, {response.text}"
+    llm = OpenAI(api_key=API_KEY) 
+    prompt_template = """
+        {context} + "\n\nYou are responsible for project documentation. Given short summaries of each codefile, from context. create an overall summary of the project, technologies used, what it's functionalities are."
+    """
+    prompt = prompt_template.format(context = context)
+    response = llm.generate(prompts=[prompt])
+    return response.generations[0][0].text

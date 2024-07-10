@@ -23,7 +23,7 @@ SHIP_TYPES = [BATTLESHIP, CRUISER, DESTROYER, SUBMARINE] = (
     2,
 )  # supported ship types
 SHIP_NAMES = {
-    BATTLESHIP: "Battleship",
+    BATTLESHIP: "Battleship"
     CRUISER: "Cruiser",
     DESTROYER: "Destroyer",
     SUBMARINE: "Submarine",
