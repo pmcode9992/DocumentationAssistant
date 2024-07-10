@@ -89,7 +89,7 @@ if st.button("Generate Document") and st.session_state["get_file_structure"]:
     shortSummary = getDocumentJSON_SHORT(filestr, "short")
     longSummary = getDocumentJSON_LONG(filestr,shortSummary, "long")
     projSummary = None
-    if totalTokens < contextWindow * 0.9:
+    if totalTokens < 4000 * 0.9:
         projSummary = getProjectSummary(filestr)
     else:
         projSummary = getProjectSummary(shortSummary)

@@ -25,7 +25,7 @@ def sumChunks(shortSummary, code, lang):
     \n
     (for classes and functions)\n
     ### <<Class, Function name>>\n
-     <<Brief code snippet>> \n
+     <<Code snippet>> \n
     <<Explanation>>
     \n
     (for anything else)
