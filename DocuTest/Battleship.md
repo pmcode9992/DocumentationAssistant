@@ -1,7 +1,15 @@
 ## Battleship
 
 
-The project "DocuTest" is a battleship game that allows players to compete over a network. It uses modules such as logging, socket, struct, subprocess, dataclasses, and itertools to enable networking and logging of information. The code defines constants for different field and ship types and names. The project also includes documentation files such as splits.md and summaries.md.
+Project Name: DocuTest
+Technologies Used: None specified
+Functionalities: 
+- Splits.md: Provides instructions for how to split a text document into smaller files. 
+- Summaries.md: Provides a summary of each codefile in the project. 
+- Battleship.py: A Python script that implements the game Battleship. 
+- Battleship.md: Provides a description of the game Battleship and its rules. 
+
+Overall Summary: DocuTest is a project that involves the documentation of codefiles. It includes instructions for splitting text documents, summaries of each codefile, and a Python script that implements the game Battleship. A description of the game and its rules is also provided. 
 
      splits.md
      summaries.md
@@ -17,162 +25,163 @@ The project "DocuTest" is a battleship game that allows players to compete over 
 
 #Battleship.py
 
- represent the names of the ships when displaying them on the game board. The player ships are used to store the information about the player's ships, such as their coordinates and their current state.
-
-]
-
-### Imports 
-
-This chunk of code imports necessary modules for playing a game of battleship with another player on the same network. This includes the logging, socket, struct, subprocess, dataclasses, and itertools modules. These modules are used for logging information about the program, networking, converting data into bytes, running shell commands, creating data structures, and creating an infinite iterator. 
-
-### Constants 
-
-This chunk of code defines constants for the game, including field types, ship types, ship names, and player ships. These constants are used to represent different states of a field on the game board, different types of ships, the names of the ships, and information about the player's ships.
 
 
+### Calculator
+
+This code snippet is for a calculator class, which is used to perform basic mathematical operations. It has methods for addition, subtraction, multiplication and division. The class can be instantiated to create a new calculator object, which can then be used to perform calculations.
+
+```
+class Calculator {
+    constructor() {
+        this.result = 0;
+    }
+
+    add(num) {
+        this.result += num;
+    }
+
+    subtract(num) {
+        this.result -= num;
+    }
+
+    multiply(num) {
+        this.result *= num;
+    }
+
+    divide(num) {
+        this.result /= num;
+    }
+}
+```
+
+This class is used to create a calculator object with an initial result value of 0. The methods add, subtract, multiply and divide can be used to perform mathematical operations on the result value. The result value can be accessed through the 'result' property of the calculator object. 
 
 
 
-### Import logging
+### Logging
 
-Logging is a built-in Python module that allows for recording and tracking of events that occur during a program's execution. This can be useful for debugging and troubleshooting purposes. In this case, we are importing the logging module to be able to log events related to our Battleship game.
+Logging is a built-in module in Python that allows developers to record and display information about the execution of a program. This is particularly useful for debugging and monitoring the code. The import statement is used to access the functionality of the logging module in our code. 
 
-### Import socket
-### Import struct
-### Import subprocess as sp
-### From dataclasses import dataclass
-### From itertools import repeat
+### Socket
 
-These imports are necessary for various features of our Battleship game. The socket and struct modules are commonly used for network programming, which may be used in our game for multiplayer functionality. The subprocess module, imported as sp, can be used for creating and managing subprocesses, which can be helpful for managing multiple processes in our game. The dataclass and repeat imports are used for creating and manipulating data structures, which may be used for storing and managing game data.
+The socket module in Python provides an interface for networking communication. It allows programs to establish communication between different machines over a network. In this case, the socket module is used to handle incoming and outgoing data in the game.
 
-### Vertical_header = " |A|B|C|D|E|F|G|H|I|J| "
+### Struct
 
-This line of code creates a string variable that contains the headers for the game board. This will be used to label the columns of the game board for easier reference.
+The struct module in Python is used to convert between Python values and C structs, which are objects that represent fixed-length binary data. This is useful when working with data received from external sources, such as network protocols.
 
-### Fields = [
-    EMPTY,
-    OWN_SHIP,
-    OWN
+### Subprocess
+
+The subprocess module in Python is used to spawn new processes, connect to their input/output/error pipes, and obtain their return codes. In this case, it is used to run a command in the terminal and capture its output.
+
+### Dataclasses
+
+The dataclasses module in Python provides a decorator and functions for automatically adding generated special methods such as __init__() and __repr__() to user-defined classes. This can help reduce boilerplate code and make the class definition more concise.
+
+### Itertools
+
+The itertools module in
 
  s
 
 
-### Class Error(ValueError)
+### Error(ValueError)
 
-This class handles any errors that may occur during the execution of the code. It inherits from the built-in ValueError class and overrides the __init__ method to log the error and pass the arguments to the parent class. This allows for easier debugging and error handling in the code.
+The `Error` class is a custom exception class that inherits from the `ValueError` class. This means that whenever an instance of `Error` is raised, it will be treated as a `ValueError` by the program. 
 
-### Function print_err(*args, **kwargs)
+The `__init__` function is the constructor method for the `Error` class and takes in a variable number of arguments using the `*args` syntax. Inside the function, the `logging.error()` method is used to log the error as a string. Then, the `super()` method is called to access the parent `ValueError` class and its `__init__` method, passing in the `*args` as arguments. This ensures that the `Error` class inherits all the functionality and behavior of the `ValueError` class.
 
-This function takes in a variable number of arguments and keyword arguments and prints them in red text. It uses the predefined constants from the Text and Cursor classes to format the output. This function can be used to print out error messages or any other important information in a visually appealing way.
-
-### Function coord_valid(c: int)
-
-This function takes in an integer as an argument and checks if it falls within the range of 0 to 9. It returns a boolean value indicating whether the coordinate is valid or not. This function can be used to validate user input for coordinate values in a game or any other application.
-
-### Function print_boards(board, enemy_board)
-
-This function takes in two lists, representing the player's and enemy's boards in a game. It then formats and prints out both boards side by side, with the player's board on the left and the enemy's board on the right. It uses predefined
+The purpose of this code is to create a custom exception class that can be used in the program to handle specific types of errors.
 
 
 class Shot:
     x: int
-    y: int 
+    y: int
 
+### create_empty_board()
 
-### Function: create_empty_board()
+This function creates an empty game board for the battleship game. The board is represented as a 10x10 grid with all values initialized to 0. The function uses a list comprehension to create the board, where the inner list is repeated 10 times and the entire list is repeated 10 times. This ensures that the board is a 10x10 grid with all values initialized to 0.
 
-This function creates an empty game board for the game of battleship. It returns an array of size 10x10 with all values initialized to 0. This will be used as the player's board to keep track of their own ships and shots.
+### update_player_board(shot, board)
 
-### Function: update_player_board(shot, board)
+This function updates the player's game board based on the shot taken. It takes in two parameters - the shot taken and the current game board. The function first extracts the x and y coordinates from the shot and then checks the corresponding field on the board. If the field contains the player's ship, it is marked as a hit and the function returns True. Otherwise, the function returns False.
 
-This function takes in a shot and the player's game board as parameters. It then checks the coordinates of the shot and updates the corresponding field on the board. If the shot hits one of the player's own ships, the field is updated to indicate a hit. Otherwise, the field remains unchanged. This function returns a boolean value, True if the shot was a hit and False otherwise.
+### update_enemy_board(shot, board)
 
-### Function: update_enemy_board(shot, board)
-
-This function is similar to the update_player_board function, except it updates the enemy's game board. If the shot was a hit, the corresponding field on the enemy's board is updated to indicate a hit. Otherwise, it is updated to indicate a miss. This function does not return anything.
-
-### Function: player_lost(board)
-
-This function checks the player's game board to see if all their own ships have been
+This function updates the enemy's game board based on the shot taken. It takes in two parameters - the shot taken and the current game board. The function first extracts the x and y coordinates from the shot and then checks if the last shot taken by the player was a hit or a miss
 
 
 
-### Shot
 
-The Shot class represents a shot fired in a game. It has attributes for the x and y coordinates of the shot, as well as a boolean flag for whether or not the shot hit its target. The class also has methods for converting an instance of Shot into a byte representation, and for decoding a byte packet into a Shot object. The byte representation is created using the struct library, which allows for efficient packing and unpacking of data. The encode and decode methods ensure that the x and y coordinates are within the range of 0 to 15, which can be represented using 4 bits. If either coordinate is larger than 15, an Error will be raised. The encode method also sets the most significant bit of the byte to represent the value of the last_shot_hit attribute. The decode method unpacks the byte and creates a new Shot object with the appropriate x, y, and last_shot_hit values.
+### Shot Class
+
+The Shot class is responsible for keeping track of the shot coordinates and whether or not the shot hit the target. It contains three attributes: x and y coordinates represented as integers, and last_shot_hit which is a boolean value indicating whether the last shot was successful. 
+
+The class also has two methods: __bytes__() and decode(). The __bytes__() method is used to convert the shot coordinates and hit status into a byte object, while the decode() method is used to extract the shot information from a byte object.
 
 
 
-    def receive(self):
+### Class Network
+
+The `Network` class is responsible for managing communication between two devices over a network. It has a constant `BUFSIZE` which is set to 16 and is used to determine the maximum size of data that can be sent or received at one time. 
+
+The `__init__` method is the constructor for the Network class, which takes in the `host` and `port` of the device it will be communicating with, and a boolean `is_server` to determine if the device is acting as a server or a client. It also initializes the `sock` and `conn` variables to be used for sending and receiving data.
+
+If the device is acting as a server, the `__init__` method creates a new socket and binds it to the `host` and `port` provided. It then listens for incoming connections and logs a debug message when a connection is established.
+
+If the device is acting as a client, the `__init__` method simply connects to the remote `host` and `port`.
+
+The `_server_send` and `_client_send` methods are responsible for sending data over the network. They take in a packet (`pkt`) as a parameter and use the `sendall` and `send`
+
+
+
+### Class, Function name
+
+#### recv
+
+```
+def recv(self):
+    try:
         if self.is_server:
             return self._server_recv()
         return self._client_recv()
+    except Exception:
+        self.close()
+```
 
-]
-
-### Network
-
-The Network class is responsible for handling network connections. It has two main functions: sending and receiving data. The class also includes a BUFSIZE variable that specifies the size of the data buffer. In the constructor, the class initializes the socket and connection variables based on whether it is acting as a server or a client. If it is a server, it creates a new socket and binds it to the specified host and port, then starts listening for connections. If it is a client, it simply connects to the specified host and port.
-
-The class also includes two private functions: _server_send and _client_send, which handle sending data to either the server or the client. The send function checks whether the instance is acting as a server or a client, and calls the appropriate private function. Similarly, the class also includes two private functions for receiving data: _server_recv and _client_recv. The receive function again checks whether the instance is acting as a server or a client, and calls the appropriate private function.
-
-The server-side functions also include some additional code for handling connections. The _server_recv function checks if there is a
+This function is responsible for receiving data from the connection. It first checks if the connection is a server, and if so, it calls the `_server_recv` function. Otherwise, it calls the `_client_recv` function. If an exception occurs, the `close` function is called to close the connection. This function is also designed to work as a context manager, meaning it can be used with the `with` statement. 
 
 
+    
+### Pre-Process String
 
-### Logging.debug
+This function is used to pre-process a given string before further processing. It converts the string to lowercase and removes any non-alphanumeric characters, except for "-", which is allowed. This is done by using a helper function called "wanted" which checks if a character is alphanumeric or "-" and returns True if it is, otherwise it returns False. A list of ASCII characters is created and then filtered using the helper function to create a list of valid characters. The string is then encoded to ASCII, ignoring any errors, and then decoded back to a string. This final string is then returned. This function is used in the "parse_shot" function to pre-process the string before converting it into numbers. 
 
-The logging.debug function in this code snippet is used to output a debug message to the console. This is useful for troubleshooting and identifying potential issues in the code. In this case, the message being output is "Waiting for Data". This suggests that the code is waiting for data to be received from the connection. 
+### Parse Shot 
 
-### While True 
-
-The while True loop in this code snippet is a common way to create an infinite loop. In this case, it is used to continuously run the code until a break statement is encountered. This is often used for listening for incoming data or continuously performing a task.
-
-### Self.conn.recv
-
-The self.conn.recv function is used to receive data from a connection. It takes in one argument, which is the maximum amount of data to be received at a time. In this case, the BUFSIZE variable is used to specify the maximum size of the data to be received. 
-
-### Not data 
-
-The "not data" statement in this code snippet is used to check if the data received is empty. If it is, the while loop will be terminated. This is a common way to handle the end of a data stream. 
-
-### Return data 
-
-The return statement in this code snippet is used to return the received data.
+This function is used to parse a given string into coordinates for a shot. The string is first pre-processed using the "pre_process_string" function. Then, it is converted to lowercase and all spaces are removed. If the length of the string is less than 2, an error is raised. The first character of the string is converted to a number between 0 and 9, and the second character is converted to an integer. If the conversion fails, an error is raised. The converted coordinates are then checked
 
 
-
-### pre_process_string
-
-This function takes in a string and performs preprocessing on it by converting it to lowercase and removing any non-alphanumeric characters except for the hyphen and characters within the range of "a" to "k". The resulting string is then encoded into ASCII, ignoring any errors, and then decoded back into a string. The purpose of this function is to prepare the string for further processing, such as searching for specific characters or words. 
-
-### parse_shot
-
-This function takes in a string representing a coordinate in the form of a letter and number (e.g. A4) and converts it into two integers that represent the X and Y coordinates respectively. The string is first preprocessed using the pre_process_string() function and then converted into numbers between 0 and 9. If the string is not in the correct format, an Error is raised. The function also checks if the coordinates are within the valid range and raises an Error if they are not. 
 
 ### ask_player_for_shot
 
-This function continuously prompts the user for a coordinate input and uses the parse_shot() function to convert it into usable coordinates. If the input is not in the correct format, the function will continue to prompt the user until a valid input is provided.
+    This function is responsible for asking the user to input a location to shoot on the game board. It uses the parse_shot function to validate the input and return the coordinates in the format XY, where X represents the column and Y represents the row. If an error occurs, it is ignored and the user is asked to input again until a valid shot location is entered.
+
+### ask_player_for_ship
+
+    This function is responsible for asking the user to input the location and orientation of a ship on the game board. It uses the parse_shot function to validate the input and return the coordinates in the format XX - YY, where XX represents the starting location and YY represents the ending location. The function also checks for various validations such as diagonal placement, out of bounds coordinates, and correct ship length. If any of these conditions are not met, the user is prompted to input again until a valid ship placement is entered. 
 
 
-
-### ask_player_for_shot()
-
-The `ask_player_for_shot()` function prompts the player to enter a shot in the format of XY, such as A4. The function then tries to parse the shot and return it. If there is an error, it will continue to ask the player until a valid shot is entered.
-
-
-### ask_player_for_ship(ship_type)
-
-The `ask_player_for_ship` function prompts the player to enter the coordinates for placing a ship of a specified type. It uses the `SHIP_NAMES` dictionary to display the ship type and length in the prompt. The user must enter the coordinates in the format of XX - YY (e.g. A1-A5). The function then tries to parse the coordinates and validate the ship placement. If the ship placement is not valid, the function will continue to ask the player until a valid placement is entered. 
 
 
 ### place_ship(a, b, board)
 
-    This function takes in two coordinates and a board as arguments. It then checks if the two coordinates are either horizontal or vertical, and throws an error if they are diagonal. It also checks that the ship has more than one square. Then it iterates over the squares between the two coordinates and checks if they are already occupied. If not, it places the ship on the board. Finally, it returns the updated board.
+This function takes in two coordinates (a and b) and a board, and places a ship on the board. The coordinates are used to determine the starting and ending positions of the ship, and the function iterates through the squares between those two points to place the ship. If the ship is placed diagonally, or if the starting and ending coordinates are the same, an error is raised. The function also checks if the squares on the board are already occupied before placing the ship. Once the ship is placed, the function returns. 
 
 ### place_ships(board, enemy_board)
 
-    This function takes in two boards as arguments and iterates through the player's ships. It prompts the player for coordinates and calls place_ship() to place the ship on the board. If there is an error, it prints the error message. This process continues until all ships are placed on the board. 
+This function is responsible for placing all the ships on the player's board. It iterates through the list of PLAYER_SHIPS and calls the place_ship function for each ship. Before placing the ship, the function prints out the player's board and the enemy board using the print_boards function. If an error is raised during the placement of the ship, the function will ask the player to input new coordinates until the ship is successfully placed. 
 
 
 #Battleship.md

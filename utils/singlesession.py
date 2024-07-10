@@ -1,5 +1,6 @@
 
-from langchain_community.llms import OpenAI 
+from langchain_openai import OpenAI
+from langchain_core.prompts import PromptTemplate
 from dotenv import load_dotenv
 import os
 import requests
@@ -7,6 +8,7 @@ import json
 import copy
 from utils.summariseChunks import sumChunks
 from utils.gettokens import num_tokens_from_string
+import langchain_openai
 
 def getDocumentJSON_SHORT(filestr, length):
     code_file_extensions = [
@@ -62,7 +64,7 @@ def getSummary(codefile, length):
     
     load_dotenv()
     API_KEY = os.getenv("SingleSession_APIKEY")
-    llm = OpenAI(api_key=API_KEY) 
+    llm = OpenAI(openai_api_key = API_KEY) 
     if length == "long":
         prompt_template= """
         You are responsible for project documentation, in my project.Prepare documentation for this code as per guidelines. \nGuidelines \n- Markdown format \n- Include important code snippets if needed \n- explain the imports, and each of the functions\n Order of contents is Filename(title), brief explanation, imports, functionalities(with small code snippets 
@@ -74,17 +76,21 @@ def getSummary(codefile, length):
         You are responsible for project documentation, explain this code in very short\n\n
         {codefile}
         """
-    prompt = prompt_template.format(codefile = codefile)
-    response = llm.generate(prompts=[prompt])
-    return response.generations[0][0].text
+    prompt = PromptTemplate.from_template(prompt_template)
+    llm_chain = prompt | llm
+    response = llm_chain.invoke(codefile)
+    print(response)
+    return response
     
 def getProjectSummary(context):
     load_dotenv()
     API_KEY = os.getenv("SingleSession_APIKEY")
-    llm = OpenAI(api_key=API_KEY) 
+    llm = OpenAI(openai_api_key=API_KEY) 
     prompt_template = """
         {context} + "\n\nYou are responsible for project documentation. Given short summaries of each codefile, from context. create an overall summary of the project, technologies used, what it's functionalities are."
     """
-    prompt = prompt_template.format(context = context)
-    response = llm.generate(prompts=[prompt])
-    return response.generations[0][0].text
+    prompt = PromptTemplate.from_template(prompt_template)
+    llm_chain = prompt | llm
+    response = llm_chain.invoke(str(context))
+    # response = llm.chat(messages=[{"role": "system", "content": prompt}])
+    return response
