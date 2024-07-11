@@ -16,10 +16,4 @@ def getChunks(code, lang):
         chunk_overlap=300
     )
     splits = text_splitter.create_documents([code])
-    
-    with open("splits.md", "w") as f:
-        f.write(str(len(splits)) + "\n")
-        for line in splits:
-            f.write(str(line) + "\n\n")
-        f.close()
     return splits

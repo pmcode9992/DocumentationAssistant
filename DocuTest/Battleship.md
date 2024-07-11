@@ -1,146 +1,223 @@
 ## Battleship
 
+content='Overall Summary:\nThe project is a Battleship game implemented in Python. It includes functionalities such as creating and updating game boards, placing ships, shooting at enemy ships, and determining if a player has lost. The code also includes networking capabilities for playing the game over a network. Technologies used include socket programming for networking, dataclasses for defining data structures, and color for text formatting. The project aims to provide a classic Battleship game experience with additional features like network play.' response_metadata={'token_usage': {'completion_tokens': 94, 'prompt_tokens': 2550, 'total_tokens': 2644}, 'model_name': 'gpt-3.5-turbo-0125', 'system_fingerprint': None, 'finish_reason': 'stop', 'logprobs': None} id='run-5b2f87a6-ca91-496a-81f5-0f2bccad0d58-0' usage_metadata={'input_tokens': 2550, 'output_tokens': 94, 'total_tokens': 2644}
 
-Project Name: DocuTest
-Technologies Used: None specified
-Functionalities: 
-- Splits.md: Provides instructions for how to split a text document into smaller files. 
-- Summaries.md: Provides a summary of each codefile in the project. 
-- Battleship.py: A Python script that implements the game Battleship. 
-- Battleship.md: Provides a description of the game Battleship and its rules. 
-
-Overall Summary: DocuTest is a project that involves the documentation of codefiles. It includes instructions for splitting text documents, summaries of each codefile, and a Python script that implements the game Battleship. A description of the game and its rules is also provided. 
-
-     splits.md
-     summaries.md
      Battleship.py
      Battleship.md
 
 
-#splits.md
-
-
-#summaries.md
-
-
 #Battleship.py
 
+### Function: check_win(player_board)
 
-
-### Calculator
-
-This code snippet is for a calculator class, which is used to perform basic mathematical operations. It has methods for addition, subtraction, multiplication and division. The class can be instantiated to create a new calculator object, which can then be used to perform calculations.
-
-```
-class Calculator {
-    constructor() {
-        this.result = 0;
-    }
-
-    add(num) {
-        this.result += num;
-    }
-
-    subtract(num) {
-        this.result -= num;
-    }
-
-    multiply(num) {
-        this.result *= num;
-    }
-
-    divide(num) {
-        this.result /= num;
-    }
-}
+```python
+def check_win(player_board):
+    for row in player_board:
+        for cell in row:
+            if cell == SHIP:
+                return False
+    return True
 ```
 
-This class is used to create a calculator object with an initial result value of 0. The methods add, subtract, multiply and divide can be used to perform mathematical operations on the result value. The result value can be accessed through the 'result' property of the calculator object. 
+This function `check_win` takes a player's game board as input and iterates through each cell on the board. If it finds any cell that contains a ship, it returns `False` indicating that the player has not won yet. If no ships are found on the board, it returns `True` indicating that the player has lost all their ships and the game is over.
 
+### Import Statements
 
+- `logging`
+- `socket`
+- `struct`
+- `subprocess as sp`
+- `dataclass` from `dataclasses`
+- `repeat` from `itertools`
+- `Text`, `Background`, `Cursor` from `color`
 
-### Logging
+These import statements bring in necessary modules and classes for the Battleship game implementation. 
 
-Logging is a built-in module in Python that allows developers to record and display information about the execution of a program. This is particularly useful for debugging and monitoring the code. The import statement is used to access the functionality of the logging module in our code. 
+### Constants and Variables
 
-### Socket
+- `vertical_header`: A string representing the vertical header of the game board.
+- `FIELDS`: A list of constants representing different states on the game board.
+- `SHIP_TYPES`: A list of supported ship types with their lengths.
+- `SHIP_NAMES`: A dictionary mapping ship types to their names.
+- `PLAYER_SHIPS`: A list of ship types that belong to the player.
 
-The socket module in Python provides an interface for networking communication. It allows programs to establish communication between different machines over a network. In this case, the socket module is used to handle incoming and outgoing data in the game.
+These constants and variables are crucial for setting up the game board, ship types, and player-specific settings.
 
-### Struct
+### `Error` Class
 
-The struct module in Python is used to convert between Python values and C structs, which are objects that represent fixed-length binary data. This is useful when working with data received from external sources, such as network protocols.
+```python
+class Error(ValueError):
+    def __init__(self, *args):
+        logging.error(str(self))
+        super().__init__(*args)
+```
 
-### Subprocess
+This class defines an error handling mechanism that logs errors and raises a `ValueError` with the given arguments.
 
-The subprocess module in Python is used to spawn new processes, connect to their input/output/error pipes, and obtain their return codes. In this case, it is used to run a command in the terminal and capture its output.
+### `print_err` Function
 
-### Dataclasses
+```python
+def print_err(*args, **kwargs):
+    print(Text.RED, *args, Cursor.FULL_RESET, **kwargs)
+```
 
-The dataclasses module in Python provides a decorator and functions for automatically adding generated special methods such as __init__() and __repr__() to user-defined classes. This can help reduce boilerplate code and make the class definition more concise.
+This function prints the arguments in red color and resets the cursor. It is used for printing error messages.
 
-### Itertools
+### `coord_valid` Function
 
-The itertools module in
+```python
+def coord_valid(c: int):
+    return 0 <= c <= 9
+```
 
- s
+This function checks if a given coordinate `c` is valid within the game board, which is from 0 to 9.
 
+### `print_boards` Function
 
-### Error(ValueError)
+```python
+def print_boards(board, enemy_board):
+    # Code snippet
+```
 
-The `Error` class is a custom exception class that inherits from the `ValueError` class. This means that whenever an instance of `Error` is raised, it will be treated as a `ValueError` by the program. 
-
-The `__init__` function is the constructor method for the `Error` class and takes in a variable number of arguments using the `*args` syntax. Inside the function, the `logging.error()` method is used to log the error as a string. Then, the `super()` method is called to access the parent `ValueError` class and its `__init__` method, passing in the `*args` as arguments. This ensures that the `Error` class inherits all the functionality and behavior of the `ValueError` class.
-
-The purpose of this code is to create a custom exception class that can be used in the program to handle specific types of errors.
-
-
-class Shot:
-    x: int
-    y: int
+This function is responsible for printing the player's board and the enemy's board in a formatted manner. It uses different colors and characters to represent different states on the board. After printing the boards, it clears the screen for better visibility.
 
 ### create_empty_board()
 
-This function creates an empty game board for the battleship game. The board is represented as a 10x10 grid with all values initialized to 0. The function uses a list comprehension to create the board, where the inner list is repeated 10 times and the entire list is repeated 10 times. This ensures that the board is a 10x10 grid with all values initialized to 0.
+```python
+def create_empty_board():
+    return [10 * [0] for _ in repeat(0, 10)]
+```
 
-### update_player_board(shot, board)
-
-This function updates the player's game board based on the shot taken. It takes in two parameters - the shot taken and the current game board. The function first extracts the x and y coordinates from the shot and then checks the corresponding field on the board. If the field contains the player's ship, it is marked as a hit and the function returns True. Otherwise, the function returns False.
-
-### update_enemy_board(shot, board)
-
-This function updates the enemy's game board based on the shot taken. It takes in two parameters - the shot taken and the current game board. The function first extracts the x and y coordinates from the shot and then checks if the last shot taken by the player was a hit or a miss
+This function creates and returns an empty game board with dimensions 10x10 filled with zeros.
 
 
+### update_player_board()
+
+```python
+def update_player_board(shot, board):
+    x = shot.x
+    y = shot.y
+    field = board[y][x]
+    if field == OWN_SHIP:
+        board[y][x] = OWN_SHIP_HIT
+        return True
+    return False
+```
+
+This function updates the player's board based on the shot taken. If the shot hits the player's own ship, it marks the corresponding position as hit (OWN_SHIP_HIT) and returns True. Otherwise, it returns False.
 
 
-### Shot Class
+### update_enemy_board()
 
-The Shot class is responsible for keeping track of the shot coordinates and whether or not the shot hit the target. It contains three attributes: x and y coordinates represented as integers, and last_shot_hit which is a boolean value indicating whether the last shot was successful. 
+```python
+def update_enemy_board(shot, board):
+    x = shot.x
+    y = shot.y
+    if shot.last_shot_hit:
+        board[y][x] = ENEMY_SHIP_HIT
+    else:
+        board[y][x] = MISS
+```
 
-The class also has two methods: __bytes__() and decode(). The __bytes__() method is used to convert the shot coordinates and hit status into a byte object, while the decode() method is used to extract the shot information from a byte object.
-
-
-
-### Class Network
-
-The `Network` class is responsible for managing communication between two devices over a network. It has a constant `BUFSIZE` which is set to 16 and is used to determine the maximum size of data that can be sent or received at one time. 
-
-The `__init__` method is the constructor for the Network class, which takes in the `host` and `port` of the device it will be communicating with, and a boolean `is_server` to determine if the device is acting as a server or a client. It also initializes the `sock` and `conn` variables to be used for sending and receiving data.
-
-If the device is acting as a server, the `__init__` method creates a new socket and binds it to the `host` and `port` provided. It then listens for incoming connections and logs a debug message when a connection is established.
-
-If the device is acting as a client, the `__init__` method simply connects to the remote `host` and `port`.
-
-The `_server_send` and `_client_send` methods are responsible for sending data over the network. They take in a packet (`pkt`) as a parameter and use the `sendall` and `send`
+This function updates the enemy's board based on the shot taken. If the last shot was a hit, it marks the corresponding position as hit (ENEMY_SHIP_HIT). Otherwise, it marks it as a miss (MISS).
 
 
+### player_lost()
 
-### Class, Function name
+```python
+def player_lost(board):
+    return not any(OWN_SHIP in set(x) for x in board)
+```
 
-#### recv
+This function checks if the player has lost by checking if there are no more own ships (OWN_SHIP) left on the board. If there are no own ships remaining, it returns True indicating that the player has lost.
+
+### Shot
 
 ```
+class Shot:
+    x: int
+    y: int
+    last_shot_hit: bool = False
+
+    def __bytes__(self):
+        if self.x >= 2**4:
+            raise Error(
+                f"X={self.x} is too large to fit into 4 bit: {hex(self.x)} > 0xf."
+            )
+        if self.y >= 2**4:
+            raise Error(
+                f"X={self.y} is too large to fit into 4 bit: {hex(self.y)} > 0xf."
+            )
+
+        return struct.pack("!BB", (self.x << 4) | self.y, int(self.last_shot_hit) << 7)
+
+    @staticmethod
+    def decode(pkt):
+        xy, h = struct.unpack("!BB", pkt)
+        return Shot(xy >> 4, xy & 0xF, h >> 7)
+```
+
+The `Shot` class represents a shot taken in the Battleship game. It has attributes `x` and `y` representing the coordinates of the shot, and `last_shot_hit` indicating whether the last shot was a hit or not. The `__bytes__` method converts the shot object into bytes by packing the coordinates and hit status into a binary format. The `decode` static method decodes a packet of bytes back into a `Shot` object by unpacking the coordinates and hit status. It handles errors for coordinates exceeding 4 bits.
+
+### Network
+
+```python
+class Network:
+    BUFSIZE = 16
+
+    def __init__(self, host, port, is_server):
+
+        self.is_server = is_server
+        self.sock = None
+        self.conn = None
+
+        if self.is_server:
+            # Create a new socket
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock.bind((host, port))
+            self.sock.listen()
+            logging.debug("Server is listening on port " + str(port))
+
+        else:
+            # Connect to a remote host
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock.connect((host, port))
+
+    def _server_send(self, pkt):
+        self.conn.sendall(pkt)
+
+    def _client_send(self, pkt):
+        self.sock.send(pkt)
+
+    def send(self, pkt):
+        if self.is_server:
+            return self._server_send(pkt)
+        return self._client_send(pkt)
+
+    def _server_recv(self):
+        if self.conn is None:
+            while True:
+                logging.debug("Server is waiting for a connection.")
+                self.conn, self.addr = self.sock.accept()
+                break
+
+        logging.debug("Waiting for Data")
+        while True:
+            data = self.conn.recv(self.BUFSIZE)
+            if not data:
+                break
+            return data
+
+    def _client_recv(self):
+        data = self.sock.recv(self.BUFSIZE)
+        return data
+```
+
+This chunk of code defines a class `Network` that is used for handling network communication in the Battleship game. It includes methods for sending and receiving data between players, setting up connections as a server or a client, and handling communication over sockets. The class also initializes attributes such as `is_server`, `sock`, and `conn` for managing the network state. The `BUFSIZE` constant is set to 16 for defining the buffer size for data transmission.
+
+### Function: recv
+
+```python
 def recv(self):
     try:
         if self.is_server:
@@ -150,38 +227,154 @@ def recv(self):
         self.close()
 ```
 
-This function is responsible for receiving data from the connection. It first checks if the connection is a server, and if so, it calls the `_server_recv` function. Otherwise, it calls the `_client_recv` function. If an exception occurs, the `close` function is called to close the connection. This function is also designed to work as a context manager, meaning it can be used with the `with` statement. 
+This function is responsible for receiving data from either the server or the client based on the value of `is_server` attribute. It first checks if the instance is acting as a server, then calls `_server_recv()` function, otherwise calls `_client_recv()` function. If an exception occurs during the process, it closes the connection using the `close()` method.
 
+### Function: close
 
-    
-### Pre-Process String
+```python
+def close(self):
+    self.sock.close()
+    if self.conn:
+        self.conn.close()
+```
 
-This function is used to pre-process a given string before further processing. It converts the string to lowercase and removes any non-alphanumeric characters, except for "-", which is allowed. This is done by using a helper function called "wanted" which checks if a character is alphanumeric or "-" and returns True if it is, otherwise it returns False. A list of ASCII characters is created and then filtered using the helper function to create a list of valid characters. The string is then encoded to ASCII, ignoring any errors, and then decoded back to a string. This final string is then returned. This function is used in the "parse_shot" function to pre-process the string before converting it into numbers. 
+The `close` function closes the socket connection and checks if there is a connection object (`conn`) available before closing it.
 
-### Parse Shot 
+### Special Method: __enter__
 
-This function is used to parse a given string into coordinates for a shot. The string is first pre-processed using the "pre_process_string" function. Then, it is converted to lowercase and all spaces are removed. If the length of the string is less than 2, an error is raised. The first character of the string is converted to a number between 0 and 9, and the second character is converted to an integer. If the conversion fails, an error is raised. The converted coordinates are then checked
+```python
+def __enter__(self):
+    # enables context manager
+    return self
+```
 
+This special method `__enter__` enables the object to act as a context manager.
 
+### Special Method: __exit__
+
+```python
+def __exit__(self, exc_type, exc_val, exc_tb):
+    # enables context manager
+    self.close()
+```
+
+The special method `__exit__` is used to handle the exiting of a context manager. It ensures that the connection is closed when exiting the context.
+
+### pre_process_string
+
+The `pre_process_string` function takes a string as input, converts it to lowercase, and filters out unwanted characters. It uses a helper function `wanted` which checks if the character is alphanumeric or a hyphen or falls within the range of "a" to "k". It then encodes the string into ASCII, ignores any errors, and decodes back to ASCII while translating the string based on the `ascii_code_point_filter`. The processed string is returned.
+
+### parse_shot
+
+The `parse_shot` function preprocesses the input string using the `pre_process_string` function, converts it to lowercase, removes spaces, and checks if the length of the string is at least 2. It then converts the characters into numbers between 0 and 9, handling errors for invalid input strings and out of bounds coordinates. Finally, it returns the converted x and y coordinates.
 
 ### ask_player_for_shot
 
-    This function is responsible for asking the user to input a location to shoot on the game board. It uses the parse_shot function to validate the input and return the coordinates in the format XY, where X represents the column and Y represents the row. If an error occurs, it is ignored and the user is asked to input again until a valid shot location is entered.
+The `ask_player_for_shot` function continuously prompts the user to input a shot in the format XY (e.g., A4). It calls the `parse_shot` function to process the input and returns the converted coordinates if successful. It handles errors by catching exceptions and retrying until a valid shot is provided.
+
+### ask_player_for_shot
+
+```python
+def ask_player_for_shot():
+    while 1:
+        try:
+            return parse_shot(input("Shoot (Format XY, e.g. A4): "))
+        except Error:
+            pass
+```
+
+This function prompts the player to input a shot in the format XY (e.g., A4) and then tries to parse the shot input. It keeps asking the player for a valid shot until a valid shot is entered.
 
 ### ask_player_for_ship
 
-    This function is responsible for asking the user to input the location and orientation of a ship on the game board. It uses the parse_shot function to validate the input and return the coordinates in the format XX - YY, where XX represents the starting location and YY represents the ending location. The function also checks for various validations such as diagonal placement, out of bounds coordinates, and correct ship length. If any of these conditions are not met, the user is prompted to input again until a valid ship placement is entered. 
+```python
+def ask_player_for_ship(ship_type):
+    length = ship_type
+    while True:
+        s = input(
+            f"Place your {SHIP_NAMES.get(ship_type)} (length: {length}) formatted as XX - YY (e.g. A1-A5): "
+        )
+        # assume the following format: XX - YY and ask until the user enters something valid
+        try:
+            a, b = s.lower().replace(" ", "").split("-")
+            a0, a1, _ = parse_shot(a)
+            b0, b1, _ = parse_shot(b)
 
+            # validate ship
+            # ships can be either vertical or horizontal
+            # so only one dimension can change: a-z or 1-9
+            if a0 != b0 and a1 != b1:
+                print_err("Ships cannot be diagonal.")
+                continue
 
+            # out of bounds
+            if any([not coord_valid(x) for x in [a0, a1, b0, b1]]):
+                print_err("Ships coordinates out of bounds.")
+                continue
 
+            # length
+            if max(abs(a0 - b0), abs(a1 - b1)) != (length - 1):
+                print_err(f"Ship must be exactly {length} fields long.")
+                continue
 
-### place_ship(a, b, board)
+            return (a0, a1), (b0, b1)
 
-This function takes in two coordinates (a and b) and a board, and places a ship on the board. The coordinates are used to determine the starting and ending positions of the ship, and the function iterates through the squares between those two points to place the ship. If the ship is placed diagonally, or if the starting and ending coordinates are the same, an error is raised. The function also checks if the squares on the board are already occupied before placing the ship. Once the ship is placed, the function returns. 
+        except (IndexError, ValueError) as e:
+            print_err("Invalid Format: ", str(e))
 
-### place_ships(board, enemy_board)
+```
 
-This function is responsible for placing all the ships on the player's board. It iterates through the list of PLAYER_SHIPS and calls the place_ship function for each ship. Before placing the ship, the function prints out the player's board and the enemy board using the print_boards function. If an error is raised during the placement of the ship, the function will ask the player to input new coordinates until the ship is successfully placed. 
+This function asks the player to place a ship on the board by specifying the ship's starting and ending positions in the format XX - YY (e.g., A1-A5). It then validates the ship's position, checking for diagonal placement, out-of-bounds coordinates, and ensuring the ship's length matches the specified ship type. The function continues to prompt the player until a valid ship placement is entered.
+
+### place_ship
+
+```python
+def place_ship(a, b, board):
+    a0, a1 = a
+    b0, b1 = b
+
+    if a0 != b0 and a1 != b1:
+        raise Error("Ship cannot be diagonal")
+
+    if a0 == b0 and a1 == b1:
+        raise Error("Ship must have more than one square")
+
+    # iterate over the squares until a0 == b0 and b1 == b1
+    while True:
+        if board[a1][a0] != EMPTY:
+            raise Error("Field already occupied")
+
+        board[a1][a0] = OWN_SHIP
+
+        if a0 != b0:
+            a0 += 1 * (-1 if a0 > b0 else 1)
+
+        elif a1 != b1:
+            a1 += 1 * (-1 if a1 > b1 else 1)
+
+        if a0 == b0 and a1 == b1:
+            board[a1][a0] = OWN_SHIP
+            return
+```
+
+This function is responsible for placing a ship on the game board. It takes the start and end coordinates of the ship, along with the game board. It checks if the ship is not diagonal and has more than one square. Then it iterates over the squares between the start and end coordinates, checking if the squares are already occupied. If not, it places the ship on the board.
+
+### place_ships
+
+```python
+def place_ships(board, enemy_board):
+    for ship in PLAYER_SHIPS:
+        print_boards(board, enemy_board)
+        while 1:
+            try:
+                coords = ask_player_for_ship(ship)
+                place_ship(*coords, board)
+                break
+            except ValueError as err:
+                print_err(str(err))
+```
+
+This function is responsible for placing all the ships on the game board. It iterates over the player's ships, asks the player for ship coordinates, and then calls the `place_ship` function to place the ship on the board. If there is an error, it prints the error message.
 
 
 #Battleship.md

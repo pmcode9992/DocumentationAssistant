@@ -1,5 +1,5 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 from dotenv import load_dotenv
 import os
@@ -16,7 +16,7 @@ def sumChunks(shortSummary, code, lang):
         chunks.append(i.page_content)
     
 
-    llm = OpenAI(openai_api_key=API_KEY) 
+    llm = ChatOpenAI(model="gpt-3.5-turbo", api_key=API_KEY) 
 
     prompt_template = """You are an expert programmer responsible for preparing documentation for a large codefile, You will have an array containing summary of the entire code file in the 0th index, followed by summaries of the chunks of files encountered so far. Your task is to understand the context and generate an explanation for the next chunk of code.\n\n
     Output Format(Markdown)- \n
@@ -39,16 +39,8 @@ def sumChunks(shortSummary, code, lang):
         prompt = PromptTemplate.from_template(prompt_template)
         llm_chain = prompt | llm
         response = llm_chain.invoke({'chunk' : chunk, 'context' : chunks[0] })
-        print(response)
         summaries.append(response)
-
-    with open("summaries.md", "w") as f:
-        for line in summaries:
-            f.write(str(line) + "\n\n")
-        f.close()
-    
     summ = ""
-    with open("summaries.md") as f:
-        summ = f.read()
-        f.close()
+    for line in summaries:
+        summ +=str(line.content) + "\n\n"
     return summ

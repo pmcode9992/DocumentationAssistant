@@ -1,5 +1,5 @@
 
-from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 from dotenv import load_dotenv
 import os
@@ -64,7 +64,7 @@ def getSummary(codefile, length):
     
     load_dotenv()
     API_KEY = os.getenv("SingleSession_APIKEY")
-    llm = OpenAI(openai_api_key = API_KEY) 
+    llm = ChatOpenAI(model="gpt-3.5-turbo",api_key = API_KEY) 
     if length == "long":
         prompt_template= """
         You are responsible for project documentation, in my project.Prepare documentation for this code as per guidelines. \nGuidelines \n- Markdown format \n- Include important code snippets if needed \n- explain the imports, and each of the functions\n Order of contents is Filename(title), brief explanation, imports, functionalities(with small code snippets 
@@ -79,18 +79,16 @@ def getSummary(codefile, length):
     prompt = PromptTemplate.from_template(prompt_template)
     llm_chain = prompt | llm
     response = llm_chain.invoke(codefile)
-    print(response)
     return response
     
 def getProjectSummary(context):
     load_dotenv()
     API_KEY = os.getenv("SingleSession_APIKEY")
-    llm = OpenAI(openai_api_key=API_KEY) 
+    llm = ChatOpenAI(model="gpt-3.5-turbo",api_key = API_KEY) 
     prompt_template = """
         {context} + "\n\nYou are responsible for project documentation. Given short summaries of each codefile, from context. create an overall summary of the project, technologies used, what it's functionalities are."
     """
     prompt = PromptTemplate.from_template(prompt_template)
     llm_chain = prompt | llm
     response = llm_chain.invoke(str(context))
-    # response = llm.chat(messages=[{"role": "system", "content": prompt}])
-    return response
+    return str(response.content)

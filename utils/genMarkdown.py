@@ -22,6 +22,7 @@ def genMarkdown(projName, projSummary, folderstr, longSummary):
     try:
         current_path = os.getcwd()
         file_path = os.path.join(current_path, f"{projName}.md")
+        print(file_path)
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(f"## {projName}\n\n")
             f.write(projSummary)
@@ -32,8 +33,8 @@ def genMarkdown(projName, projSummary, folderstr, longSummary):
             formatted_longSummary = formatSummary(longSummary, True)
             f.write(formatted_longSummary)
             f.close()
-    except:
-        print("DIDNT MAKE FILE")
+    except Exception as e:
+        print(e)
     with open(file_path, 'r', encoding='utf-8') as file:
             file_contents = file.read()
     return [file_contents, file_path]
