@@ -30,7 +30,7 @@ def getDocumentJSON_SHORT(filestr, length):
                 filestr_copy[key] = getDocumentJSON_SHORT(value, length)
     else:
         print(filestr_copy)
-    
+     
     return filestr_copy
 
 def getDocumentJSON_LONG(filestr, shortSummary, length):
@@ -79,7 +79,7 @@ def getSummary(codefile, length):
     prompt = PromptTemplate.from_template(prompt_template)
     llm_chain = prompt | llm
     response = llm_chain.invoke(codefile)
-    return response
+    return response.content
     
 def getProjectSummary(context):
     load_dotenv()

@@ -32,7 +32,8 @@ def sumChunks(shortSummary, code, lang):
     (for anything else)
     <<Code snippet (body text)>>\n
     <<Explanation>>
-    
+    \n
+    Explain the main function if found
     \n\n Context - {context} \n\n Next chunk of code- {chunk}"""
     summaries = []
     for chunk in chunks:
