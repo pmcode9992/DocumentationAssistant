@@ -7,7 +7,7 @@ def formatSummary(filestr, summary, indent = 0):
             if (value is None) and (not summary):
                 output += ("     " * indent+ f"{item}\n")
             elif isinstance(value, str) and summary:
-                output += f"#{item}\n\n{value}\n"
+                output += f"# {item}\n\n{value}\n"
             else:
                 output += formatSummary(value, summary, indent + 1)
     else:

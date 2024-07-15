@@ -33,7 +33,8 @@ def sumChunks(shortSummary, code, lang):
     <<Code snippet (body text)>>\n
     <<Explanation>>
     \n
-    Explain the main function if found
+    Explain the main function if found\n
+    (Looks like if name == "__main__")
     \n\n Context - {context} \n\n Next chunk of code- {chunk}"""
     summaries = []
     for chunk in chunks:

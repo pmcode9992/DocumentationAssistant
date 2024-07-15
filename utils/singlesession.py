@@ -67,7 +67,7 @@ def getSummary(codefile, length):
     llm = ChatOpenAI(model="gpt-3.5-turbo",api_key = API_KEY) 
     if length == "long":
         prompt_template= """
-        You are responsible for project documentation, in my project.Prepare documentation for this code as per guidelines. \nGuidelines \n- Markdown format \n- Include important code snippets if needed \n- explain the imports, and each of the functions\n Order of contents is Filename(title), brief explanation, imports, functionalities(with small code snippets 
+        You are responsible for project documentation, in my project.Prepare documentation for this code as per guidelines. \nGuidelines \n- Markdown format \n- Include important code snippets if needed \n- explain the imports, and each of the functions\n Order of contents is brief explanation, imports, functionalities(with small code snippets 
         \n\n
         {codefile}
         """
