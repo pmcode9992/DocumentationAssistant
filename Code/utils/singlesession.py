@@ -30,7 +30,7 @@ def getDocumentJSON_SHORT(filestr, length):
                 filestr_copy[key] = getDocumentJSON_SHORT(value, length)
     else:
         print(filestr_copy)
-    
+     
     return filestr_copy
 
 def getDocumentJSON_LONG(filestr, shortSummary, length):
@@ -67,7 +67,7 @@ def getSummary(codefile, length):
     llm = ChatOpenAI(model="gpt-3.5-turbo",api_key = API_KEY) 
     if length == "long":
         prompt_template= """
-        You are responsible for project documentation, in my project.Prepare documentation for this code as per guidelines. \nGuidelines \n- Markdown format \n- Include important code snippets if needed \n- explain the imports, and each of the functions\n Order of contents is Filename(title), brief explanation, imports, functionalities(with small code snippets 
+        You are responsible for project documentation, in my project.Prepare documentation for this code as per guidelines. \nGuidelines \n- Markdown format \n- Include important code snippets if needed \n- explain the imports, and each of the functions\n Order of contents is brief explanation, imports, functionalities(with small code snippets 
         \n\n
         {codefile}
         """
@@ -79,7 +79,7 @@ def getSummary(codefile, length):
     prompt = PromptTemplate.from_template(prompt_template)
     llm_chain = prompt | llm
     response = llm_chain.invoke(codefile)
-    return response
+    return response.content
     
 def getProjectSummary(context):
     load_dotenv()

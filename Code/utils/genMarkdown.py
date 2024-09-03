@@ -7,7 +7,7 @@ def formatSummary(filestr, summary, indent = 0):
             if (value is None) and (not summary):
                 output += ("     " * indent+ f"{item}\n")
             elif isinstance(value, str) and summary:
-                output += f"#{item}\n\n{value}\n"
+                output += f"# {item}\n\n{value}\n"
             else:
                 output += formatSummary(value, summary, indent + 1)
     else:
@@ -22,7 +22,7 @@ def genMarkdown(projName, projSummary, folderstr, longSummary):
     try:
         current_path = os.getcwd()
         file_path = os.path.join(current_path, f"{projName}.md")
-        print(file_path)
+        
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(f"## {projName}\n\n")
             f.write(projSummary)

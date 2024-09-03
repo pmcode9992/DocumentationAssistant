@@ -97,7 +97,6 @@ if st.button("Generate Document") and st.session_state["get_file_structure"]:
     st.session_state["shortSum"] = shortSummary
     st.session_state["longSum"] = longSummary
     st.session_state["projSum"] = projSummary
-
     st.write("🎉Your Document has been saved into the project folder")
     markdown_content = genMarkdown(projectName,st.session_state["projSum"], st.session_state["foldrstr"], st.session_state["longSum"]  )
     
