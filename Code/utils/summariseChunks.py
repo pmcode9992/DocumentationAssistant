@@ -9,7 +9,6 @@ load_dotenv()
 API_KEY = os.getenv("SingleSession_APIKEY")
 
 def sumChunks(shortSummary, code, lang):
-   
     splits = getChunks(code, lang)
     chunks = [shortSummary]
     for i in splits:
